@@ -6,4 +6,7 @@ use_case.drawio
 Курсовая_сети.docx
 ПЗ_СетевыеПриложения.odt
 diplom/frontend/node_modules/*
+diplom/diplom/__pycache__/*
+diplom/park_manage/__pycache__/*
+diplom/park_manage/migrations/*
 env
