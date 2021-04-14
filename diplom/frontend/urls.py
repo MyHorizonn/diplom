@@ -1,4 +1,6 @@
+from django.urls import path
+from . import views
+
 urlpatterns = [
-    path('', include('leads.urls')),
-    path('', include('frontend.urls')),
+    path('', views.index)
 ]
