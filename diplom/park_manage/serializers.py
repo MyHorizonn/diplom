@@ -9,7 +9,7 @@ class MachineSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        return Order.objects.create(**validated_data)
+        return Machine.objects.create(**validated_data)
 
 
 class MachineListSerializer(serializers.ModelSerializer):
@@ -20,7 +20,7 @@ class MachineListSerializer(serializers.ModelSerializer):
         fields = ('machine_name', 'hour_or_day', 'duration', 'cost')
 
     def create(self, validated_data):
-        return Order.objects.create(**validated_data)
+        return MachineList.objects.create(**validated_data)
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -28,7 +28,8 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('date_of_order', 'cost', 'client_num', 'client_fio', 'address', 'machines')
+        fields = ('date_of_order', 'cost', 'client_num',
+                  'client_fio', 'address', 'machines')
 
     def create(self, validated_data):
         return Order.objects.create(**validated_data)

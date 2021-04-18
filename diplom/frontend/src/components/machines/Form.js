@@ -74,6 +74,7 @@ export class Form extends Component {
                     <div className="form-group">
                     <label>Status</label>
                     <select className="form-control" name="status" value={status} onChange={this.onChange}>
+                        <option value="" selected disabled hidden>Choose here</option>
                         <option value="FREE">Free</option>
                         <option value="NOT_FREE">Busy</option>
                         <option value="REPAIR">On repair</option>
