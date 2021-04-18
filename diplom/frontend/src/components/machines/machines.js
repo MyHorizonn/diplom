@@ -1,11 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getMachines, delMachines } from '../../actions/machines';
+import { getMachines, delMachines, createMachines } from '../../actions/machines';
 
 export class Machines extends Component {
     static propTypes = {
-        machines: PropTypes.array.isRequired
+        machines: PropTypes.array.isRequired,
+        getMachines: PropTypes.func.isRequired,
+        delMachines: PropTypes.func.isRequired,
     };
 
     componentDidMount(){
@@ -17,7 +19,7 @@ export class Machines extends Component {
             <Fragment>
                 <h2>Machines</h2>
                 <table className="table">
-                    <thread>
+                    <thead>
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
@@ -27,7 +29,7 @@ export class Machines extends Component {
                             <th>Status</th>
                             <th/>
                         </tr>
-                    </thread>
+                    </thead>
                     <tbody>
                         { this.props.machines.map((machine) =>(
                             <tr key={machine.id}>

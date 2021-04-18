@@ -25,7 +25,7 @@ SECRET_KEY = '&016@3$xl(iifl5au&j09!v7bwlj1%(_xtc9kq+s*pa3#((irp'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'park_manage',
     'frontend',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [

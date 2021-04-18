@@ -5,8 +5,8 @@ app_name = "park_manage"
 
 router = DefaultRouter()
 
-router.register(r'orders', OrderView, basename='user')
-router.register(r'machines', MachineView, basename='user')
-router.register(r'machinelists', MachineListView, basename='user')
+router.register(r'orders', OrderView, 'orders')
+router.register(r'machines', MachineView, 'machines')
+router.register(r'machinelists', MachineListView, 'machinelists')
 
 urlpatterns = router.urls
