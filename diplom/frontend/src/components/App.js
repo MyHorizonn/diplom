@@ -1,10 +1,12 @@
 import React, {Component, Fragment} from 'react';
 import ReactDOM from 'react-dom';
+import { HashRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
 
 import Header from './layout/header.js';
-import Dashboard from './machines/Dashboard';
+import Dashboard_machines from './machines/Dashboard';
 import { Provider } from "react-redux";
 import store from '../store';
+import Dashboard_orders from './orders/Dashboard';
 
 
 class App extends Component{
@@ -12,12 +14,18 @@ class App extends Component{
     render(){
         return(
             <Provider store={store}>
+                <Router>
                 <Fragment>
                     <Header />
                     <div className="container">
-                        <Dashboard />
+                        <Switch>
+                            <Route exact path="/machines" component={Dashboard_machines}/>
+                            <Route exact path="/orders" component={Dashboard_orders} />
+                            <Route exact path="/" component={Dashboard_machines}/>
+                        </Switch> 
                     </div>
                 </Fragment>
+                </Router>
             </Provider>
         );
     }

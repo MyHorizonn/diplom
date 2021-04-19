@@ -10,7 +10,7 @@ class Order(models.Model):
     address = models.CharField(null=False, blank=False, max_length=150)
 
     def __str__(self):
-        return "%s" % self.id
+        return "%s" % self.address
 
 
 class Machine(models.Model):
@@ -43,6 +43,9 @@ class MachineList(models.Model):
         max_digits=10, decimal_places=2, null=False, blank=False, default=0)
     order = models.ForeignKey(
         Order, on_delete=models.CASCADE, related_name='machines')
+
+    def __str__(self):
+        return "%s" % self.order.address
 
     @property
     def new_cost(self):

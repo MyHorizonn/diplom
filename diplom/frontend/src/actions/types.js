@@ -1,3 +1,6 @@
 export const GET_MACHINES = 'GET_MACHINES';
 export const DELETE_MACHINES = 'DELETE_MACHINES';
 export const CREATE_MACHINES = 'CREATE_MACHINES';
+export const GET_ORDERS = 'GET_ORDERS';
+export const CREATE_ORDER = 'CREATE_ORDER';
+export const DELETE_ORDER = 'DELETE_ORDER';

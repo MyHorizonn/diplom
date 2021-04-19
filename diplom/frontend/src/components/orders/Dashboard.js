@@ -1,17 +1,17 @@
 import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom';
 import Form from './Form';
-import Machines from './machines'
+import Orders from './orders'
 
 
-export default function Dashboard_machines() {
+export default function Dashboard_orders() {
     return (
         <Fragment>
-            <Link to ="/orders">
-                Orders
+            <Link to ="/machines">
+                Machines
             </Link>
             <Form />
-            <Machines />
+            <Orders/>
         </Fragment>
     )
 }

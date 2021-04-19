@@ -22,6 +22,8 @@ export class Form extends Component {
         const {name, about, cost_to_hour, cost_to_day, status} = this.state;
         const machines = {name, about, cost_to_hour, cost_to_day, status};
         this.props.createMachines(machines);
+        console.log(machines.id);
+        console.log("machines");
         console.log("submit");
     }
  

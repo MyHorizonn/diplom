@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getMachines, delMachines, createMachines } from '../../actions/machines';
+import { getMachines, delMachines } from '../../actions/machines';
 
 export class Machines extends Component {
     static propTypes = {
