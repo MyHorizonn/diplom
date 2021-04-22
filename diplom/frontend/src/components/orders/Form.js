@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types'
 import {createOrder} from '../../actions/orders'
+import {getMachines} from '../../actions/machines'
 
 export class Form extends Component {
     state = {
@@ -13,14 +14,24 @@ export class Form extends Component {
     }
 
     static propTypes = {
-        createOrder: PropTypes.func.isRequired
+        createOrder: PropTypes.func.isRequired,
+        machines: PropTypes.array.isRequired,
+        getMachines: PropTypes.func.isRequired
     };
+
+    componentDidMount(){
+        this.props.getMachines();
+    }
 
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
     onSubmit = (e) => {
         e.preventDefault();
+        var m = document.getElementById("id_machines-0-machine");
+        var hd = document.getElementById("hd");
+        var d = document.getElementById("id_machins-0-duration");
+        var machines = {hour_or_day: hd.value, duration: d.value, machine: m.value}
         const {date_of_order, cost, client_num, client_fio, address} = this.state;
-        const orders = {date_of_order, cost, client_num, client_fio, address};
+        const orders = {date_of_order, cost, client_num, client_fio, address, machines};
         this.props.createOrder(orders);
         console.log("submit");
     }
@@ -42,7 +53,7 @@ export class Form extends Component {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Cost</label>
+                        <label>Cost ₽</label>
                         <input
                         className="form-control"
                         type="text"
@@ -87,30 +98,31 @@ export class Form extends Component {
                             <tr>
                                 <th className="columne-machine required">Machine</th>
                                 <th className="column-hour_or_day required">Hour or day</th>
-                                <th className="column-durations required">Duration</th>
+                                <th className="column-duration required">Duration</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr className="form-row dynamic-machines" id="machine-0">
                                 <td className="field-machine">
-                                <select className="machines-0-machine" id="id_machines-0-machine">
-                                    <option value="" selected disabled hidden>---------</option>
+                                    <select className="machines-0-machine" id="id_machines-0-machine">
+                                        <option value="" selected disabled hidden>---------</option>
+                                        {this.props.machines.map((machine) =>(
+                                            <option key={machine.id} value={machine.id}>{machine.name}</option>
+                                        ))}
                                 </select>
                                 </td>
                                 <td className="field-hour_or_day">
-                                    <select>
+                                    <select id="hd">
                                         <option value="" selected disabled hidden>---------</option>
                                         <option value="HOUR">Hour</option>
                                         <option value="DAY">Day</option>
                                     </select>
                                 </td>
-                                <td>
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    name="address"
-                                    onChange={this.onChange}
-                                    value={address}
+                                <td className="field-duration">
+                                    <input
+                                    type="number"
+                                    name="machines-0-duraion"
+                                    id="id_machins-0-duration"
                                     />
                                 </td>
                             </tr>
@@ -128,4 +140,8 @@ export class Form extends Component {
     }
 }
 
-export default connect(null, {createOrder})(Form);
+const mapStateToProps = state => ({
+    machines: state.machines.machines
+})
+
+export default connect(mapStateToProps, {createOrder, getMachines})(Form);

@@ -23,7 +23,7 @@ export class Orders extends Component {
                         <tr>
                             <th>ID</th>
                             <th>Date of order</th>
-                            <th>Cost</th>
+                            <th>Cost ₽</th>
                             <th>Client phone</th>
                             <th>Client name</th>
                             <th>Address</th>

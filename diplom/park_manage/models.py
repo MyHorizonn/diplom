@@ -32,7 +32,8 @@ class Machine(models.Model):
 
 
 class MachineList(models.Model):
-    machine = models.ForeignKey(Machine, on_delete=models.CASCADE, null=False)
+    machine = models.ForeignKey(
+        Machine, on_delete=models.CASCADE, null=False, related_name='orders')
     CHOICES = (
         ('HOUR', 'hour'),
         ('DAY', 'day'),
@@ -42,7 +43,7 @@ class MachineList(models.Model):
     cost = models.DecimalField(
         max_digits=10, decimal_places=2, null=False, blank=False, default=0)
     order = models.ForeignKey(
-        Order, on_delete=models.CASCADE, related_name='machines')
+        Order, on_delete=models.CASCADE, null=False, related_name='machines')
 
     def __str__(self):
         return "%s" % self.order.address
