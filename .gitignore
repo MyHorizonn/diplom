@@ -6,11 +6,13 @@ use_case.drawio
 Курсовая_сети.docx
 ПЗ_СетевыеПриложения.odt
 env
+lenv
 *.egg-info
 *.pot
 *.py[co]
 .tox/
 __pycache__
+diplom/diplom/__pycache__/*
 migrations
 MANIFEST
 dist/
