@@ -12,6 +12,18 @@ export const getMachines = () => dispatch => {
     }).catch(err => console.log(err));
 };
 
+export const getMachines_or = () => dispatch => { 
+    axios.get('/api/machines/', {params: {id: 1}})
+    .then(res => {
+        dispatch({
+            type: GET_MACHINES,
+            payload: res.data
+        });
+    }).catch(err => console.log(err));
+};
+
+//
+
 export const delMachines = id => dispatch => { 
     axios.delete(`/api/machines/${id}/`)
     .then(res => {

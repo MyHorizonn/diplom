@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types'
 import {createOrder} from '../../actions/orders'
-import {getMachines} from '../../actions/machines'
+import {getMachines_or} from '../../actions/machines'
 
 export class Form extends Component {
     state = {
@@ -16,11 +16,11 @@ export class Form extends Component {
     static propTypes = {
         createOrder: PropTypes.func.isRequired,
         machines: PropTypes.array.isRequired,
-        getMachines: PropTypes.func.isRequired
+        getMachines_or: PropTypes.func.isRequired
     };
 
     componentDidMount(){
-        this.props.getMachines();
+        this.props.getMachines_or();
     }
 
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -37,6 +37,9 @@ export class Form extends Component {
     }
  
     render() {
+        const style = {
+            borderSpacing: '7px 11px'
+        }
         const {date_of_order, cost, client_num, client_fio, address} = this.state;
         return (
             <div className="card card-body mt-4 mb-4">
@@ -96,33 +99,42 @@ export class Form extends Component {
                     <table>
                         <thead>
                             <tr>
-                                <th className="columne-machine required">Machine</th>
-                                <th className="column-hour_or_day required">Hour or day</th>
-                                <th className="column-duration required">Duration</th>
+                                <th>Machine</th>
+                                <th>Hour or day</th>
+                                <th>Duration</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr className="form-row dynamic-machines" id="machine-0">
                                 <td className="field-machine">
                                     <select className="machines-0-machine" id="id_machines-0-machine">
-                                        <option value="" selected disabled hidden>---------</option>
+                                        <option value="" selected disabled hidden>------------------</option>
                                         {this.props.machines.map((machine) =>(
                                             <option key={machine.id} value={machine.id}>{machine.name}</option>
                                         ))}
-                                </select>
+                                    </select>
                                 </td>
                                 <td className="field-hour_or_day">
-                                    <select id="hd">
-                                        <option value="" selected disabled hidden>---------</option>
-                                        <option value="HOUR">Hour</option>
-                                        <option value="DAY">Day</option>
-                                    </select>
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                <input type="radio" value="DAY" name="hd"/>День
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                <input type="radio" value="HOUR" name="hd"/>Час
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </td>
                                 <td className="field-duration">
                                     <input
                                     type="number"
                                     name="machines-0-duraion"
-                                    id="id_machins-0-duration"
+                                    id="id_machines-0-duration"
                                     />
                                 </td>
                             </tr>
@@ -144,4 +156,4 @@ const mapStateToProps = state => ({
     machines: state.machines.machines
 })
 
-export default connect(mapStateToProps, {createOrder, getMachines})(Form);
+export default connect(mapStateToProps, {createOrder, getMachines_or})(Form);

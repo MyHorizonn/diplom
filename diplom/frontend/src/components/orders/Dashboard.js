@@ -10,7 +10,7 @@ export default function Dashboard_orders() {
             <Link to ="/machines">
                 Machines
             </Link>
-            <Form />
+            <Form/>
             <Orders/>
         </Fragment>
     )
