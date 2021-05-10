@@ -26,6 +26,7 @@ class Machine(models.Model):
         ('REPAIR', 'on repair'),
     )
     status = models.CharField(max_length=150, choices=STATUS)
+    
 
     def __str__(self):
         return "%s" % self.name
