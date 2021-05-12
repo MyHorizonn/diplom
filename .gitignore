@@ -10,9 +10,8 @@ lenv
 *.egg-info
 *.pot
 *.py[co]
+**/__pycache__
 .tox/
-__pycache__
-diplom/diplom/__pycache__/*
 migrations
 MANIFEST
 dist/

@@ -1,11 +1,11 @@
-import React, { Fragment } from 'react'
-import { Link } from 'react-router-dom';
+import React, {Fragment} from 'react';
+import {Link} from 'react-router-dom';
 import Form from './Form';
-import Machines from './machines'
+import Index from './main'
 
 
-export default function Dashboard_machines() {
-    return (
+export default function Dashboard_main(){
+    return(
         <Fragment>
             <div>
             <table style={{ borderSpacing: '11px 7px', borderCollapse: 'separate'}}>
@@ -17,16 +17,16 @@ export default function Dashboard_machines() {
                             </Link> 
                         </th>
                         <th>
-                        <Link to ="/">
-                                На главную
+                        <Link to ="/machines">
+                                Список техники
                             </Link> 
                         </th>
                     </tr>
                 </thead>
             </table>
             </div>
-            <Form />
-            <Machines />
+            <Form/>
+            <Index/>
         </Fragment>
     )
 }

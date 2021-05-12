@@ -42,7 +42,7 @@ export class Form extends Component {
         }
         const {date_of_order, cost, client_num, client_fio, address} = this.state;
         return (
-            <div className="card card-body mt-4 mb-4">
+            <div>
                 <h2>Add Order</h2>
                 <form onSubmit={this.onSubmit}>
                     <div className="form-group">
