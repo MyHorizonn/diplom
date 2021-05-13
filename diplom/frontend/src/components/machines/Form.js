@@ -16,12 +16,17 @@ export class Form extends Component {
         createMachines: PropTypes.func.isRequired
     };
 
+    Clear(){
+        
+    }
+
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
     onSubmit = (e) => {
         e.preventDefault();
         const {name, about, cost_to_hour, cost_to_day, status} = this.state;
         const machines = {name, about, cost_to_hour, cost_to_day, status};
         this.props.createMachines(machines);
+        this.asd();
         console.log("submit");
     }
  

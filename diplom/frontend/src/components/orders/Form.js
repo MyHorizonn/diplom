@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types'
 import {createOrder} from '../../actions/orders'
-import {getMachines_or} from '../../actions/machines'
+import {getFreeMachines} from '../../actions/machines'
 
 export class Form extends Component {
     state = {
@@ -16,11 +16,11 @@ export class Form extends Component {
     static propTypes = {
         createOrder: PropTypes.func.isRequired,
         machines: PropTypes.array.isRequired,
-        getMachines_or: PropTypes.func.isRequired
+        getFreeMachines: PropTypes.func.isRequired
     };
 
     componentDidMount(){
-        this.props.getMachines_or();
+        this.props.getFreeMachines();
     }
 
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -37,12 +37,9 @@ export class Form extends Component {
     }
  
     render() {
-        const style = {
-            borderSpacing: '7px 11px'
-        }
         const {date_of_order, cost, client_num, client_fio, address} = this.state;
         return (
-            <div>
+            <div className="card card-body mt-4 mb-4">
                 <h2>Add Order</h2>
                 <form onSubmit={this.onSubmit}>
                     <div className="form-group">
@@ -96,7 +93,7 @@ export class Form extends Component {
                         />
                     </div>
                     <div className="form-group">
-                    <table className= "table-borderless">
+                    <table style={{ borderSpacing: '11px 7px', borderCollapse: 'separate'}}>
                         <thead>
                             <tr>
                                 <th>Machine</th>
@@ -107,14 +104,14 @@ export class Form extends Component {
                         <tbody>
                             <tr id="machine-0">
                                 <td className="field-machine">
-                                    <select className="machines-0-machine" id="id_machines-0-machine">
+                                    <select className='form-control' id="id_machines-0-machine">
                                         <option value="" selected disabled hidden>------------------</option>
                                         {this.props.machines.map((machine) =>(
                                             <option key={machine.id} value={machine.id}>{machine.name}</option>
                                         ))}
                                     </select>
                                 </td>
-                                <td className="field-hour_or_day">
+                                <td id='field-hour_or_day'>
                                     <table>
                                         <tbody>
                                             <tr>
@@ -156,4 +153,4 @@ const mapStateToProps = state => ({
     machines: state.machines.machines
 })
 
-export default connect(mapStateToProps, {createOrder, getMachines_or})(Form);
+export default connect(mapStateToProps, {createOrder, getFreeMachines})(Form);

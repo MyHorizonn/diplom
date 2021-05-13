@@ -10,7 +10,7 @@ export class Form extends Component{
 
     render(){
         return(
-            <div>
+            <div className="card card-body mt-4 mb-4">
 
             </div>
         )

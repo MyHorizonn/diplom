@@ -8,7 +8,7 @@ export default function Dashboard_machines() {
     return (
         <Fragment>
             <div>
-            <table style={{ borderSpacing: '11px 7px', borderCollapse: 'separate'}}>
+            <table style={{ borderSpacing: '11px 7px', borderCollapse: 'separate', marginLeft: '35%'}}>
                 <thead>
                     <tr style={{textDecoration: 'underline'}}>
                         <th>

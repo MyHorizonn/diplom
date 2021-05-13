@@ -16,3 +16,8 @@ class MachineListView(viewsets.ModelViewSet):
 class OrderView(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     queryset = Order.objects.all()
+
+
+class FreeMachineView(viewsets.ModelViewSet):
+    serializer_class = MachineSerializer
+    queryset = Machine.objects.filter(status='FREE')

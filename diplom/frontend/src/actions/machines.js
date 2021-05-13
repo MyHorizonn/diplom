@@ -12,8 +12,8 @@ export const getMachines = () => dispatch => {
     }).catch(err => console.log(err));
 };
 
-export const getMachines_or = () => dispatch => { 
-    axios.get('/api/machines/', {params: {id: 1}})
+export const getFreeMachines = () => dispatch => { 
+    axios.get('/api/freemachines/')
     .then(res => {
         dispatch({
             type: GET_MACHINES,
