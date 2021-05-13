@@ -16,3 +16,4 @@ class OrderAdmin(admin.ModelAdmin):
 admin.site.register(Machine)
 admin.site.register(MachineList)
 admin.site.register(Order, OrderAdmin)
+admin.site.register(Request)

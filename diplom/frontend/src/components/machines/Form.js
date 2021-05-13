@@ -26,7 +26,7 @@ export class Form extends Component {
         const {name, about, cost_to_hour, cost_to_day, status} = this.state;
         const machines = {name, about, cost_to_hour, cost_to_day, status};
         this.props.createMachines(machines);
-        this.asd();
+        this.Clear();
         console.log("submit");
     }
  
@@ -34,10 +34,10 @@ export class Form extends Component {
         const {name, about, cost_to_hour, cost_to_day, status} = this.state;
         return (
             <div className="card card-body mt-4 mb-4">
-                <h2>Add Machine</h2>
+                <h2>Добавить технику</h2>
                 <form onSubmit={this.onSubmit}>
                     <div className="form-group">
-                        <label>Name</label>
+                        <label>Название</label>
                         <input
                         className="form-control"
                         type="text"
@@ -47,7 +47,7 @@ export class Form extends Component {
                         />
                     </div>
                     <div className="form-group">
-                        <label>About</label>
+                        <label>Описание</label>
                         <input
                         className="form-control"
                         type="text"
@@ -57,7 +57,7 @@ export class Form extends Component {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Cost per hour</label>
+                        <label>Стоимость в час</label>
                         <input
                         className="form-control"
                         type="text"
@@ -67,7 +67,7 @@ export class Form extends Component {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Cost per day</label>
+                        <label>Стоимость в день</label>
                         <input
                         className="form-control"
                         type="text"
@@ -77,17 +77,17 @@ export class Form extends Component {
                         />
                     </div>
                     <div className="form-group">
-                    <label>Status</label>
+                    <label>Состояние</label>
                     <select className="form-control" name="status" value={status} onChange={this.onChange}>
-                        <option value="" selected disabled hidden>Choose here</option>
-                        <option value="FREE">Free</option>
-                        <option value="NOT_FREE">Busy</option>
-                        <option value="REPAIR">On repair</option>
+                        <option value="" selected disabled hidden>-------------------</option>
+                        <option value="FREE">Свободна</option>
+                        <option value="NOT_FREE">Занята</option>
+                        <option value="REPAIR">Ремонт</option>
                     </select>
                     </div>
                     <div className="form-group">
                         <button type="submit" className="btn btn-primary">
-                            Submit
+                            Добавить
                         </button>
                     </div>
                 </form>

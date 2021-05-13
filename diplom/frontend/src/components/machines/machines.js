@@ -17,16 +17,16 @@ export class Machines extends Component {
     render() {
         return (
             <Fragment>
-                <h2>Machines</h2>
+                <h2>Список техники</h2>
                 <table className="table">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
-                            <th>About</th>
-                            <th>Cost per hour</th>
-                            <th>Cost per day</th>
-                            <th>Status</th>
+                            <th>Название</th>
+                            <th>Описание</th>
+                            <th>Стоимость в час</th>
+                            <th>Стоимость в день</th>
+                            <th>Состояние</th>
                             <th/>
                         </tr>
                     </thead>
@@ -42,7 +42,7 @@ export class Machines extends Component {
                                 <td><button
                                 onClick={this.props.delMachines.bind(this, machine.id)}
                                 className="btn btn-danger btn-sm">
-                                    Delete</button></td>
+                                    Удалить</button></td>
                             </tr>
                         ))}
                     </tbody>

@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Order(models.Model):
-    date_of_order = models.DateField(null=False, blank=False)
+    date_of_order = models.DateTimeField(null=False, blank=False)
     cost = models.DecimalField(
         decimal_places=2, max_digits=10, null=False, blank=False, default=0)
     client_num = models.CharField(null=False, blank=False, max_length=150)
@@ -30,6 +30,11 @@ class Machine(models.Model):
 
     def __str__(self):
         return "%s" % self.name
+
+
+class Request(models.Model):
+    fio = models.CharField(null=False, max_length=150, blank=False)
+    number = models.CharField(null=False, max_length=150, blank=False)
 
 
 class MachineList(models.Model):

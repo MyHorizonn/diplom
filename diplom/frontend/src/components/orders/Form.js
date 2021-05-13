@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import {createOrder} from '../../actions/orders'
 import {getFreeMachines} from '../../actions/machines'
 
+const blocks = 0;
+
 export class Form extends Component {
     state = {
         date_of_order: '',
@@ -26,44 +28,36 @@ export class Form extends Component {
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
     onSubmit = (e) => {
         e.preventDefault();
-        var m = document.getElementById("id_machines-0-machine");
-        var hd = document.getElementById("hd");
-        var d = document.getElementById("id_machins-0-duration");
+        var m = document.getElementById("machine-0");
+        var hd = document.getElementById("hd-0");
+        var d = document.getElementById("duration-0");
+        console.log(hd.value)
         var machines = {hour_or_day: hd.value, duration: d.value, machine: m.value}
-        const {date_of_order, cost, client_num, client_fio, address} = this.state;
-        const orders = {date_of_order, cost, client_num, client_fio, address, machines};
+        const {date_of_order, client_num, client_fio, address} = this.state;
+        const orders = {date_of_order, cost:0, client_num, client_fio, address, machines};
+        console.log(orders)
         this.props.createOrder(orders);
-        console.log("submit");
+        
     }
  
     render() {
-        const {date_of_order, cost, client_num, client_fio, address} = this.state;
+        const {date_of_order, client_num, client_fio, address} = this.state;
         return (
             <div className="card card-body mt-4 mb-4">
-                <h2>Add Order</h2>
+                <h2>Добавить заказ</h2>
                 <form onSubmit={this.onSubmit}>
                     <div className="form-group">
-                        <label>Date of order</label>
+                        <label>Дата заказа</label>
                         <input
                         className="form-control"
-                        type="date"
+                        type="datetime-local"
                         name="date_of_order"
                         onChange={this.onChange}
                         value={date_of_order}
                         />
                     </div>
                     <div className="form-group">
-                        <label>Cost ₽</label>
-                        <input
-                        className="form-control"
-                        type="text"
-                        name="cost"
-                        onChange={this.onChange}
-                        value={cost}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Phone number</label>
+                        <label>Номер телефона</label>
                         <input
                         className="form-control"
                         type="text"
@@ -73,7 +67,7 @@ export class Form extends Component {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Client name</label>
+                        <label>ФИО клиента</label>
                         <input
                         className="form-control"
                         type="text"
@@ -83,7 +77,7 @@ export class Form extends Component {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Address</label>
+                        <label>Адрес</label>
                         <input
                         className="form-control"
                         type="text"
@@ -93,19 +87,19 @@ export class Form extends Component {
                         />
                     </div>
                     <div className="form-group">
-                    <table style={{ borderSpacing: '11px 7px', borderCollapse: 'separate'}}>
+                    <table style={{ borderSpacing: '30px 7px', borderCollapse: 'separate'}}>
                         <thead>
                             <tr>
-                                <th>Machine</th>
-                                <th>Hour or day</th>
-                                <th>Duration</th>
+                                <th>Техника</th>
+                                <th>Режим</th>
+                                <th>Длительность</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr id="machine-0">
+                            <tr id="block-0">
                                 <td className="field-machine">
-                                    <select className='form-control' id="id_machines-0-machine">
-                                        <option value="" selected disabled hidden>------------------</option>
+                                    <select className='form-control' id="machine-0">
+                                        <option value="" selected disabled hidden>----------------</option>
                                         {this.props.machines.map((machine) =>(
                                             <option key={machine.id} value={machine.id}>{machine.name}</option>
                                         ))}
@@ -116,22 +110,21 @@ export class Form extends Component {
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                <input type="radio" value="DAY" name="hd"/>День
+                                                <input type="radio" value="DAY" name="hd-0" id="hd-0"/>День
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>
-                                                <input type="radio" value="HOUR" name="hd"/>Час
+                                                <input type="radio" value="HOUR" name="hd-0" id="hd-0"/>Час
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </td>
-                                <td className="field-duration">
+                                <td>
                                     <input
                                     type="number"
-                                    name="machines-0-duraion"
-                                    id="id_machines-0-duration"
+                                    id="duration-0"
                                     />
                                 </td>
                             </tr>
@@ -140,7 +133,7 @@ export class Form extends Component {
                     </div>
                     <div className="form-group">
                         <button type="submit" className="btn btn-primary">
-                            Submit
+                            Добавить
                         </button>
                     </div>
                 </form>

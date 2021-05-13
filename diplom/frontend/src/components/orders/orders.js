@@ -17,16 +17,16 @@ export class Orders extends Component {
     render() {
         return (
             <Fragment>
-                <h2>Orders</h2>
+                <h2>Список заказов</h2>
                 <table className="table">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Date of order</th>
-                            <th>Cost ₽</th>
-                            <th>Client phone</th>
-                            <th>Client name</th>
-                            <th>Address</th>
+                            <th>Дата заказа</th>
+                            <th>Стоимость ₽</th>
+                            <th>Номер телефона</th>
+                            <th>ФИО клиента</th>
+                            <th>Адрес</th>
                             <th/>
                         </tr>
                     </thead>
@@ -42,7 +42,7 @@ export class Orders extends Component {
                                 <td><button
                                 onClick={this.props.delOrder.bind(this, order.id)}
                                 className="btn btn-danger btn-sm">
-                                    Delete</button></td>
+                                    Удалить</button></td>
                             </tr>
                         ))}
                     </tbody>

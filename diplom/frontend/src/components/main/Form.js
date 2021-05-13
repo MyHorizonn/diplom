@@ -11,7 +11,8 @@ export class Form extends Component{
     render(){
         return(
             <div className="card card-body mt-4 mb-4">
-
+                <h2>Оставьте заявку</h2>
+                
             </div>
         )
     }
