@@ -2,7 +2,8 @@ from django.db import models
 
 
 class Order(models.Model):
-    date_of_order = models.DateTimeField(null=False, blank=False)
+    date_of_order = models.DateField(null=False, blank=False)
+    order_time = models.TimeField(null=False, blank=False)
     cost = models.DecimalField(
         decimal_places=2, max_digits=10, null=False, blank=False, default=0)
     client_num = models.CharField(null=False, blank=False, max_length=150)
@@ -70,3 +71,12 @@ class MachineList(models.Model):
         super(MachineList, self).save(*args, **kwargs)
         order.save()
         #machine.save()
+
+
+class Timing(models.Model):
+    machine = models.ForeignKey(Machine, null=False, on_delete=models.CASCADE, related_name="timing")
+    
+
+
+class History(models.Model):
+    date_of_order = models.DateField(null=False, blank=False)

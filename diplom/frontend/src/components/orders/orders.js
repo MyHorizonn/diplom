@@ -23,6 +23,7 @@ export class Orders extends Component {
                         <tr>
                             <th>ID</th>
                             <th>Дата заказа</th>
+                            <th>Время заказа</th>
                             <th>Стоимость ₽</th>
                             <th>Номер телефона</th>
                             <th>ФИО клиента</th>
@@ -36,6 +37,7 @@ export class Orders extends Component {
                             <tr key={order.id}>
                                 <td>{order.id}</td>
                                 <td>{order.date_of_order}</td>
+                                <td>{order.order_time}</td>
                                 <td>{order.cost}</td>
                                 <td>{order.client_num}</td>
                                 <td>{order.client_fio}</td>
@@ -43,9 +45,6 @@ export class Orders extends Component {
                                 <td>{order.machines.map((machine)=>(
                                     <tr key={machine.id}>
                                         <td>{machine.id}</td>
-                                        <td>{machine.hour_or_day}</td>
-                                        <td>Д: {machine.duration}</td>
-                                        <td>Т: {machine.machine}</td>
                                     </tr>
                                 ))}</td>
                                 <td><button

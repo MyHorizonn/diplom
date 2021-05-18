@@ -9,6 +9,7 @@ const blocks = 0;
 export class Form extends Component {
     state = {
         date_of_order: '',
+        order_time: '',
         cost: '',
         client_num: '',
         client_fio: '',
@@ -30,16 +31,16 @@ export class Form extends Component {
         e.preventDefault();
         var m = document.getElementById("machine-0");
         var hd = document.querySelector('input[name=hd-0]:checked');
-        console.log(hd.value);
         var d = document.getElementById("duration-0");
         var machines = {hour_or_day: hd.value, duration: d.value, machine: m.value}
-        const {date_of_order, client_num, client_fio, address} = this.state;
-        const orders = {date_of_order, cost:0, client_num, client_fio, address, machines};
+        const {date_of_order, order_time, client_num, client_fio, address} = this.state;
+        const orders = {date_of_order, order_time, cost: 0, client_num, client_fio, address, machines};
+        console.log(orders)
         this.props.createOrder(orders);
     }
  
     render() {
-        const {date_of_order, client_num, client_fio, address} = this.state;
+        const {date_of_order, order_time, client_num, client_fio, address} = this.state;
         return (
             <div className="card card-body mt-4 mb-4">
                 <h2>Добавить заказ</h2>
@@ -48,10 +49,20 @@ export class Form extends Component {
                         <label>Дата заказа</label>
                         <input
                         className="form-control"
-                        type="datetime-local"
+                        type="date"
                         name="date_of_order"
                         onChange={this.onChange}
                         value={date_of_order}
+                        />
+                    </div>
+                    <div className="form_group">
+                        <label>Время заказа</label>
+                        <input
+                        className="form-control"
+                        type="time"
+                        name="order_time"
+                        onChange={this.onChange}
+                        value={order_time}
                         />
                     </div>
                     <div className="form-group">
