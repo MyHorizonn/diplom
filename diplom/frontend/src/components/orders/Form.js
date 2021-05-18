@@ -29,15 +29,13 @@ export class Form extends Component {
     onSubmit = (e) => {
         e.preventDefault();
         var m = document.getElementById("machine-0");
-        var hd = document.getElementById("hd-0");
+        var hd = document.querySelector('input[name=hd-0]:checked');
+        console.log(hd.value);
         var d = document.getElementById("duration-0");
-        console.log(hd.value)
         var machines = {hour_or_day: hd.value, duration: d.value, machine: m.value}
         const {date_of_order, client_num, client_fio, address} = this.state;
         const orders = {date_of_order, cost:0, client_num, client_fio, address, machines};
-        console.log(orders)
         this.props.createOrder(orders);
-        
     }
  
     render() {
@@ -110,12 +108,12 @@ export class Form extends Component {
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                <input type="radio" value="DAY" name="hd-0" id="hd-0"/>День
+                                                <input type="radio" value="DAY" name="hd-0"/>День
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>
-                                                <input type="radio" value="HOUR" name="hd-0" id="hd-0"/>Час
+                                                <input type="radio" value="HOUR" name="hd-0"/>Час
                                                 </td>
                                             </tr>
                                         </tbody>

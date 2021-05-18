@@ -27,6 +27,7 @@ export class Orders extends Component {
                             <th>Номер телефона</th>
                             <th>ФИО клиента</th>
                             <th>Адрес</th>
+                            <th>Техника</th>
                             <th/>
                         </tr>
                     </thead>
@@ -39,6 +40,14 @@ export class Orders extends Component {
                                 <td>{order.client_num}</td>
                                 <td>{order.client_fio}</td>
                                 <td>{order.address}</td>
+                                <td>{order.machines.map((machine)=>(
+                                    <tr key={machine.id}>
+                                        <td>{machine.id}</td>
+                                        <td>{machine.hour_or_day}</td>
+                                        <td>Д: {machine.duration}</td>
+                                        <td>Т: {machine.machine}</td>
+                                    </tr>
+                                ))}</td>
                                 <td><button
                                 onClick={this.props.delOrder.bind(this, order.id)}
                                 className="btn btn-danger btn-sm">

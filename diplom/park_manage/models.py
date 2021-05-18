@@ -65,5 +65,8 @@ class MachineList(models.Model):
         self.cost = self.new_cost
         order = Order.objects.get(pk=self.order.id)
         order.cost += self.cost
+        #machine = Machine.objects.get(pk=self.machine.id)
+        #machine.status = 'NOT_FREE'
         super(MachineList, self).save(*args, **kwargs)
         order.save()
+        #machine.save()
