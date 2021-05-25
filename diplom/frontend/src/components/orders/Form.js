@@ -35,7 +35,6 @@ export class Form extends Component {
         var machines = {hour_or_day: hd.value, duration: d.value, machine: m.value}
         const {date_of_order, order_time, client_num, client_fio, address} = this.state;
         const orders = {date_of_order, order_time, cost: 0, client_num, client_fio, address, machines};
-        console.log(orders)
         this.props.createOrder(orders);
     }
  
@@ -119,12 +118,12 @@ export class Form extends Component {
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                <input type="radio" value="DAY" name="hd-0"/>День
+                                                <input type="radio" value="DAY" name="hd-0"/> День
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>
-                                                <input type="radio" value="HOUR" name="hd-0"/>Час
+                                                <input type="radio" value="HOUR" name="hd-0"/> Час
                                                 </td>
                                             </tr>
                                         </tbody>

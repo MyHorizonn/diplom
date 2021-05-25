@@ -1,7 +1,6 @@
 import React, {Fragment} from 'react';
 import {Link} from 'react-router-dom';
-import Form from './Form';
-import Index from './main'
+import MyMap from './map';
 
 
 export default function Dashboard_main(){
@@ -25,8 +24,7 @@ export default function Dashboard_main(){
                 </thead>
             </table>
             </div>
-            <Form/>
-            <Index/>
+            <MyMap/>
         </Fragment>
     )
 }
