@@ -15,7 +15,6 @@ export class Orders extends Component {
     }
 
     render() {
-        console.log("orders_render:", this.props.orders)
         return (
             <Fragment>
                 <h2>Список заказов</h2>

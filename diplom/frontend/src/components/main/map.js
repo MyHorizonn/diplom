@@ -28,38 +28,23 @@ var style = new Style({
 
 
 function createMap(orders){
+  console.log("orders:", orders)
   var i = 0;
   orders.map((order) => {
-    console.log("coords",[order.coordinate.lat, order.coordinate.lon])
+    console.log("coords:",[parseFloat(order.coordinate.lat), parseFloat(order.coordinate.lon)])
     points[i] = new Feature({
-      geometry: new Point(fromLonLat(transform([order.coordinate.lat, order.coordinate.lon], 'EPSG:3857', 'EPSG:4326')))
+      geometry: new Point(fromLonLat([parseFloat(order.coordinate.lon), parseFloat(order.coordinate.lat)]))
     })
     points[i].setStyle(style)
     console.log('point', points[i])
     i += 1;
   })
-  
   var layer = new VectorLayer({
     source: new VectorSource({
       features: points
     })
   })
-
-  var olmap = new Map({
-    target: null,
-    layers: [
-      new Tile({
-        source: new OSM()
-      }),
-      layer,
-    ],
-    view: new View({
-      center: [5348044, 5835836],
-      zoom: 13
-    })
-  })
-
-  return olmap
+  return layer
 }
 
 
@@ -69,17 +54,47 @@ export class MyMap extends Component{
     getOrders: PropTypes.func.isRequired,
   }
 
+  constructor(props){
+    super(props)
+
+    this.olmap = new Map({
+      target: null,
+      layers: [
+        new Tile({
+          source: new OSM()
+        })
+      ],
+      view: new View({
+        center: [5348044, 5835836],
+        zoom: 13,
+      })
+    })
+
+    this.olmap.on('singleclick', (evt) =>{
+      var feature = new Feature({
+        geometry: new Point(fromLonLat(transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326')))
+      })
+      feature.setStyle(style)
+      var layer = new VectorLayer({
+        source: new VectorSource({
+          features: [feature]
+        })
+      })
+      this.olmap.addLayer(layer)
+      this.olmap.addLayer(createMap(this.props.orders))
+    })
+      
+  }
+
   componentDidMount() {
+    this.olmap.setTarget('map')
     this.props.getOrders()
-    console.log("orders_cdm:",this.props.orders)
   }
 
   render() {
-    var map = createMap(this.props.orders)
-    console.log("orders_render:",this.props.orders)
+    this.olmap.addLayer(createMap(this.props.orders))
     return(
       <div id="map" style={{ width: "100%", height: "700px" }}>
-        {map.setTarget('map')}
       </div>
     ) 
   }
