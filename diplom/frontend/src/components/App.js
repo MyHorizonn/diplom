@@ -8,7 +8,8 @@ import { Provider } from "react-redux";
 import store from '../store';
 import Dashboard_orders from './orders/Dashboard';
 import Dashboard_main from './main/Dashboard';
-
+require("babel-core/register");
+require("babel-polyfill");
 
 class App extends Component{
 

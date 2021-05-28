@@ -26,6 +26,8 @@ SECRET_KEY = '&016@3$xl(iifl5au&j09!v7bwlj1%(_xtc9kq+s*pa3#((irp'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 
 
 # Application definition
@@ -51,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'diplom.urls'

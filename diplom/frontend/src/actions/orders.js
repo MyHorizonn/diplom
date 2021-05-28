@@ -14,7 +14,7 @@ export const getOrders = () => dispatch => {
 
 export const delOrder = id => dispatch =>{
     axios.delete(`api/orders/${id}/`)
-    .then(res=>{
+    .then(res => {
         dispatch({
             type: DELETE_ORDER,
             payload: id
@@ -27,7 +27,7 @@ export const createOrder = (orders) => dispatch =>{
     let temp = {};
     let machine = {};
     order = {date_of_order: orders.date_of_order, order_time: orders.order_time, client_num: orders.client_num, 
-        client_fio: orders.client_fio, address: orders.address};
+        client_fio: orders.client_fio, address: orders.address, coordinate: orders.coordinate};
     temp = orders.machines
     axios.post('api/orders/', order)
     .then(res =>{

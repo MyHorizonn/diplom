@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.fields import NullBooleanField
 
 
 class Order(models.Model):
@@ -9,6 +10,7 @@ class Order(models.Model):
     client_num = models.CharField(null=False, blank=False, max_length=150)
     client_fio = models.CharField(null=False, blank=False, max_length=150)
     address = models.CharField(null=False, blank=False, max_length=150)
+    coordinate = models.JSONField(null=False, blank=False)
 
     def __str__(self):
         return "%s" % self.address
@@ -31,11 +33,6 @@ class Machine(models.Model):
 
     def __str__(self):
         return "%s" % self.name
-
-
-class Request(models.Model):
-    fio = models.CharField(null=False, max_length=150, blank=False)
-    number = models.CharField(null=False, max_length=150, blank=False)
 
 
 class MachineList(models.Model):
@@ -71,12 +68,3 @@ class MachineList(models.Model):
         super(MachineList, self).save(*args, **kwargs)
         order.save()
         #machine.save()
-
-
-class Timing(models.Model):
-    machine = models.ForeignKey(Machine, null=False, on_delete=models.CASCADE, related_name="timing")
-    
-
-
-class History(models.Model):
-    date_of_order = models.DateField(null=False, blank=False)

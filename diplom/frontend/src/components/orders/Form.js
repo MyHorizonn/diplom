@@ -29,13 +29,25 @@ export class Form extends Component {
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
     onSubmit = (e) => {
         e.preventDefault();
+        var coordinate = {
+            "lat": '',
+            "lon": '',
+        }
         var m = document.getElementById("machine-0");
         var hd = document.querySelector('input[name=hd-0]:checked');
         var d = document.getElementById("duration-0");
         var machines = {hour_or_day: hd.value, duration: d.value, machine: m.value}
         const {date_of_order, order_time, client_num, client_fio, address} = this.state;
-        const orders = {date_of_order, order_time, cost: 0, client_num, client_fio, address, machines};
-        this.props.createOrder(orders);
+        fetch('https://nominatim.openstreetmap.org/search?q=' + address.split(' ').join('+') + '&format=json&limit=1')
+        .then((response) => response.json())
+        .then((data) =>{
+            coordinate.lat = data[0].lat
+            coordinate.lon = data[0].lon
+            const orders = {date_of_order, order_time, cost: 0, client_num, client_fio, address, coordinate, machines};
+            console.log('orders:', orders) 
+            this.props.createOrder(orders);
+        })
+        console.log("coordinate", coordinate)
     }
  
     render() {
