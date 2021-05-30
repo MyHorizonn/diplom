@@ -6,37 +6,31 @@ import Tile from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import { Feature } from 'ol';
+import { Feature, Overlay } from 'ol';
 import Point from 'ol/geom/Point';
-import { fromLonLat, transform } from 'ol/proj';
+import { fromLonLat} from 'ol/proj';
 import Style from 'ol/style/Style';
 import Icon from 'ol/style/Icon'
 import {getOrders} from '../../actions/orders'; 
 import PropTypes from 'prop-types';
-import { create } from 'ol/transform';
 
 
 var points = []
 
-
 var style = new Style({
   image: new Icon({
-    scale: 1,
-    src: 'https://openlayers.org/en/latest/examples/data/dot.svg'
+    scale: 0.7,
+    src: 'https://raw.githubusercontent.com/jonataswalker/map-utils/master/images/marker.png'
   }),
 })
 
-
 function createMap(orders){
-  console.log("orders:", orders)
   var i = 0;
   orders.map((order) => {
-    console.log("coords:",[parseFloat(order.coordinate.lat), parseFloat(order.coordinate.lon)])
     points[i] = new Feature({
       geometry: new Point(fromLonLat([parseFloat(order.coordinate.lon), parseFloat(order.coordinate.lat)]))
     })
     points[i].setStyle(style)
-    console.log('point', points[i])
     i += 1;
   })
   var layer = new VectorLayer({
@@ -67,23 +61,8 @@ export class MyMap extends Component{
       view: new View({
         center: [5348044, 5835836],
         zoom: 13,
-      })
+      }),
     })
-
-    this.olmap.on('singleclick', (evt) =>{
-      var feature = new Feature({
-        geometry: new Point(fromLonLat(transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326')))
-      })
-      feature.setStyle(style)
-      var layer = new VectorLayer({
-        source: new VectorSource({
-          features: [feature]
-        })
-      })
-      this.olmap.addLayer(layer)
-      this.olmap.addLayer(createMap(this.props.orders))
-    })
-      
   }
 
   componentDidMount() {
