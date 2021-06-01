@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -24,11 +24,14 @@ var style = new Style({
   }),
 })
 
+
+
 function createMap(orders){
   var i = 0;
   orders.map((order) => {
     points[i] = new Feature({
-      geometry: new Point(fromLonLat([parseFloat(order.coordinate.lon), parseFloat(order.coordinate.lat)]))
+      geometry: new Point(fromLonLat([parseFloat(order.coordinate.lon), parseFloat(order.coordinate.lat)])),
+      name: order.id,
     })
     points[i].setStyle(style)
     i += 1;
@@ -63,6 +66,28 @@ export class MyMap extends Component{
         zoom: 13,
       }),
     })
+
+    this.olmap.on('click', (evt) => {
+      var tik = this.olmap.getEventPixel(evt.originalEvent)
+      var overlay = new Overlay({
+        element: document.getElementById('popup'),
+        positioning: 'center-center',
+        autoPan: true,
+        stopEvent: false,
+      })
+      this.olmap.addOverlay(overlay)
+      var feature = this.olmap.getFeaturesAtPixel(tik)
+      if (feature[0]) { 
+        var popup = document.getElementById('popup')
+        console.log(feature[0].get('name'))
+        popup.innerHTML = '<div><h1>' + feature[0].get('name') + '</h1></div>'
+        overlay.setPosition(evt.coordinate)
+        $(document.getElementById('popup')).popover('show');
+      }
+      else{
+        $(document.getElementById('popup')).popover('hide');
+      }
+    })
   }
 
   componentDidMount() {
@@ -74,6 +99,7 @@ export class MyMap extends Component{
     this.olmap.addLayer(createMap(this.props.orders))
     return(
       <div id="map" style={{ width: "100%", height: "700px" }}>
+        <div id="popup" style={{position: 'absolute'}}></div>
       </div>
     ) 
   }
