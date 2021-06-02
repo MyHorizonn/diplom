@@ -6,6 +6,33 @@ import {getFreeMachines} from '../../actions/machines'
 
 const blocks = 0;
 
+function twoDigits(num) {
+    if(num < 10){
+        return "0" + num.toString()
+    }
+    return num.toString()
+}
+
+function endDate(date, time, hd, d) {
+    if(hd.value == 'DAY'){
+        var date1 = new Date(date)
+        date1.setDate(date1.getDate() + parseInt(d.value))
+        var date2 = date1.getFullYear() + '-' + twoDigits(date1.getMonth() + 1) + '-' + twoDigits(date1.getDate())
+        console.log("date:", date, "time:", time)
+        console.log("date:", date2, "time:", time)
+        return [date2, time]
+    }
+    else{
+        var date1 = new Date(date + 'T' + time)
+        date1.setHours(date1.getHours() + parseInt(d.value))
+        var date2 = twoDigits(date1.getHours()) + ':' + twoDigits(date1.getMinutes()) + ':' + twoDigits(date1.getSeconds())
+        var date3 = date1.getFullYear() + '-' + twoDigits(date1.getMonth() + 1) + '-' + twoDigits(date1.getDate())
+        console.log("date:", date, "time:", time)
+        console.log("date:", date3, "time:", date2)
+        return [date3, date2]
+    }
+}
+
 export class Form extends Component {
     state = {
         date_of_order: '',
@@ -38,13 +65,15 @@ export class Form extends Component {
         var d = document.getElementById("duration-0");
         var machines = {hour_or_day: hd.value, duration: d.value, machine: m.value}
         const {date_of_order, order_time, client_num, client_fio, address} = this.state;
+        var end_date = endDate(date_of_order, order_time, hd, d)
         fetch('https://nominatim.openstreetmap.org/search?q=' + address.split(' ').join('+') + '&format=json&limit=1')
         .then((response) => response.json())
         .then((data) =>{
+            console.log("end_date:", end_date)
             coordinate.lat = data[0].lat
             coordinate.lon = data[0].lon
-            const orders = {date_of_order, order_time, cost: 0, client_num, client_fio, address, coordinate, machines};
-            console.log('orders:', orders) 
+            const orders = {date_of_order, order_time, end_date, cost: 0, client_num, client_fio, address, coordinate, machines};
+            console.log('orders:', orders)
             this.props.createOrder(orders);
         })
         console.log("coordinate", coordinate)
@@ -130,12 +159,16 @@ export class Form extends Component {
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                <input type="radio" value="DAY" name="hd-0"/> День
+                                                    <div className="form-check">
+                                                        <input type="radio" value="DAY" name="hd-0" className="form-check-input"/> День
+                                                    </div>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>
-                                                <input type="radio" value="HOUR" name="hd-0"/> Час
+                                                    <div className="form-check">
+                                                        <input type="radio" value="HOUR" name="hd-0" className="form-check-input"/> Час
+                                                    </div>
                                                 </td>
                                             </tr>
                                         </tbody>

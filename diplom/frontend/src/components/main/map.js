@@ -25,13 +25,12 @@ var style = new Style({
 })
 
 
-
 function createMap(orders){
   var i = 0;
   orders.map((order) => {
     points[i] = new Feature({
       geometry: new Point(fromLonLat([parseFloat(order.coordinate.lon), parseFloat(order.coordinate.lat)])),
-      name: order.id,
+      name: [order.date_of_order, order.order_time, order.end_date_of_order, order.end_order_time],
     })
     points[i].setStyle(style)
     i += 1;
@@ -77,15 +76,40 @@ export class MyMap extends Component{
       })
       this.olmap.addOverlay(overlay)
       var feature = this.olmap.getFeaturesAtPixel(tik)
-      if (feature[0]) { 
-        var popup = document.getElementById('popup')
-        console.log(feature[0].get('name'))
-        popup.innerHTML = '<div><h1>' + feature[0].get('name') + '</h1></div>'
-        overlay.setPosition(evt.coordinate)
-        $(document.getElementById('popup')).popover('show');
+      if (feature[0]) {
+        document.getElementById('popup').innerHTML =
+        '<table width="525px">' +
+        '<thead>' +
+            '<tr>' +
+                '<th>Дата заказа</th>' +
+                '<th>Время заказа</th>' +
+                '<th>Дата окончания</th>' +
+                '<th>Время окончания</th>' +
+            '</tr>' +
+        '</thead>' +
+        '<tbody>' +
+         '<tr>' +
+           '<td align="center">' + feature[0].get('name')[0] + '</td>' +
+           '<td align="center">' + feature[0].get('name')[1] + '</td>' +
+           '<td align="center">' + feature[0].get('name')[2] + '</td>' +
+           '<td align="center">' + feature[0].get('name')[3] + '</td>' +
+          '</tr>' +
+           '</tbody>' +
+        '</table>'
+        overlay.setPosition(evt.coordinate);
       }
       else{
-        $(document.getElementById('popup')).popover('hide');
+        overlay.setPosition(undefined)
+      }
+    })
+
+    this.olmap.on('pointermove', (evt) =>{
+      var feature = this.olmap.getFeaturesAtPixel(this.olmap.getEventPixel(evt.originalEvent))
+      if(feature[0]){
+        this.olmap.getTargetElement().style.cursor = 'pointer'
+      }
+      else{
+        this.olmap.getTargetElement().style.cursor = ''
       }
     })
   }
@@ -98,10 +122,10 @@ export class MyMap extends Component{
   render() {
     this.olmap.addLayer(createMap(this.props.orders))
     return(
-      <div id="map" style={{ width: "100%", height: "700px" }}>
-        <div id="popup" style={{position: 'absolute'}}></div>
+      <div id="map" style={{ width: "100%", height: "700px"}}>
+        <div className="card card-body mt-4 mb-4" id="popup" style={{position: 'absolute', backgroundColor: 'white', border: '1px solid black'}}></div>
       </div>
-    ) 
+    )
   }
 }
 

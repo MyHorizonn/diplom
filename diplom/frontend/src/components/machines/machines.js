@@ -8,7 +8,7 @@ import {getOrders} from '../../actions/orders';
 function date_print(order, ord){
     if(order.hour_or_day == 'DAY'){
         var date1 = new Date(ord.date_of_order)
-        date1.setDate(date1.getDate() + order.duration)
+        date1.setDate(date1.getDate() + parseInt(order.duration))
         var date2 = date1.getFullYear() + '-' + (date1.getMonth() + 1) + '-' + date1.getDate()
         return(
             <tr>
@@ -21,7 +21,7 @@ function date_print(order, ord){
     }
     else{
         var date1 = new Date(ord.date_of_order + 'T' + ord.order_time)
-        date1.setHours(date1.getHours() + order.duration)
+        date1.setHours(date1.getHours() + parseInt(order.duration))
         var date2 = date1.getHours() + ':' + date1.getMinutes() + ':' + date1.getSeconds()
         var date3 = date1.getFullYear() + '-' + (date1.getMonth() + 1) + '-' + date1.getDate()
         return(
@@ -79,7 +79,7 @@ export class Machines extends Component {
                                         this.props.orders.map((ord) =>(
                                             ord.id == order.order &&
                                                 <div className="card card-body mt-4 mb-4">
-                                                    <table style={{width: '100%'}}>
+                                                    <table width="525px">
                                                     <thead>
                                                         <tr>
                                                             <th>Дата заказа</th>

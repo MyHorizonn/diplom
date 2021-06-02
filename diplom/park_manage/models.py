@@ -1,10 +1,11 @@
 from django.db import models
-from django.db.models.fields import NullBooleanField
 
 
 class Order(models.Model):
     date_of_order = models.DateField(null=False, blank=False)
     order_time = models.TimeField(null=False, blank=False)
+    end_date_of_order = models.DateField(null=False, blank=False)
+    end_order_time = models.TimeField(null=False, blank=False)
     cost = models.DecimalField(
         decimal_places=2, max_digits=10, null=False, blank=False, default=0)
     client_num = models.CharField(null=False, blank=False, max_length=150)
