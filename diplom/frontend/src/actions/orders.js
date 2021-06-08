@@ -26,7 +26,6 @@ export const createOrder = (orders) => dispatch =>{
     let order = {};
     let temp = {};
     let machine = {};
-    console.log("error?:",orders.end_date[0].toString(), orders.end_date[1].toString())
     order = {date_of_order: orders.date_of_order, order_time: orders.order_time, 
         end_date_of_order: orders.end_date[0].toString(), end_order_time: orders.end_date[1].toString(), client_num: orders.client_num, 
         client_fio: orders.client_fio, address: orders.address, coordinate: orders.coordinate};
@@ -37,7 +36,6 @@ export const createOrder = (orders) => dispatch =>{
             type: CREATE_ORDER,
             payload: res.data
         });
-        console.log("res_data:", res.data);
         machine = {hour_or_day: temp.hour_or_day, duration: temp.duration, machine: temp.machine, order: res.data.id};
         axios.post('api/machinelists/', machine)
         .then(res =>{

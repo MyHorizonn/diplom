@@ -21,3 +21,7 @@ class OrderView(viewsets.ModelViewSet):
 class FreeMachineView(viewsets.ModelViewSet):
     serializer_class = MachineSerializer
     queryset = Machine.objects.filter(status='FREE')
+
+
+class SearchOrderByFIO(viewsets.ModelViewSet):
+    pass

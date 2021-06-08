@@ -1,6 +1,7 @@
 import React, {Fragment} from 'react';
 import {Link} from 'react-router-dom';
 import MyMap from './map';
+import Index from './main';
 
 
 export default function Dashboard_main(){
@@ -16,7 +17,7 @@ export default function Dashboard_main(){
                             </Link> 
                         </th>
                         <th>
-                        <Link to ="/machines">
+                            <Link to ="/machines">
                                 Список техники
                             </Link> 
                         </th>

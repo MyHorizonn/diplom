@@ -13,7 +13,7 @@ export default function Dashboard_orders() {
                     <tr style={{textDecoration: 'underline'}}>
                         <th>
                             <Link to ="/machines">
-                                Список машин
+                                Список техники
                             </Link> 
                         </th>
                         <th>

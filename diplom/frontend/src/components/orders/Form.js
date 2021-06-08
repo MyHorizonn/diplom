@@ -69,14 +69,16 @@ export class Form extends Component {
         fetch('https://nominatim.openstreetmap.org/search?q=' + address.split(' ').join('+') + '&format=json&limit=1')
         .then((response) => response.json())
         .then((data) =>{
-            console.log("end_date:", end_date)
-            coordinate.lat = data[0].lat
-            coordinate.lon = data[0].lon
-            const orders = {date_of_order, order_time, end_date, cost: 0, client_num, client_fio, address, coordinate, machines};
-            console.log('orders:', orders)
-            this.props.createOrder(orders);
+            if(data[0]){
+                coordinate.lat = data[0].lat
+                coordinate.lon = data[0].lon
+                const orders = {date_of_order, order_time, end_date, cost: 0, client_num, client_fio, address, coordinate, machines};
+                this.props.createOrder(orders);
+            }
+            else{
+                alert("Адрес не найден.")
+            }
         })
-        console.log("coordinate", coordinate)
     }
  
     render() {

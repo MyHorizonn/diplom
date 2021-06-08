@@ -37,6 +37,11 @@ function date_print(order, ord){
 }
 
 export class Machines extends Component {
+
+    state = {
+        filter: '',
+    }
+
     static propTypes = {
         machines: PropTypes.array.isRequired,
         getMachines: PropTypes.func.isRequired,
@@ -44,15 +49,29 @@ export class Machines extends Component {
         getOrders: PropTypes.func.isRequired,
     };
 
+    onChange = (e) => {
+        this.setState({ [e.target.name]: e.target.value })};
+
     componentDidMount(){
         this.props.getMachines();
         this.props.getOrders();
     }
 
     render() {
+        const {filter} = this.state;
         return (
             <Fragment>
                 <h2>Список техники</h2>
+                <div className='form-group'>
+                    <label>Поиск</label>
+                    <input
+                        className="form-control"
+                        type="text"
+                        name="filter"
+                        onChange={this.onChange}
+                        value={filter}
+                    />
+                </div>
                 <table className="table">
                     <thead>
                         <tr>
@@ -67,7 +86,11 @@ export class Machines extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        { this.props.machines.map((machine) =>(
+                        { this.props.machines.filter((el) => {
+                            const  new_filter = filter.toLowerCase()
+                            return filter ?  el.name.toLowerCase().includes(new_filter) : true
+                        }
+                        ).map((machine) =>(
                             <tr key={machine.id}>
                                 <td>{machine.id}</td>
                                 <td>{machine.name}</td>
