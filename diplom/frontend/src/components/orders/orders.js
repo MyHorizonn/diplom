@@ -3,6 +3,21 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getOrders, delOrder } from '../../actions/orders';
 
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 export class Orders extends Component {
 
     state = {
@@ -19,7 +34,7 @@ export class Orders extends Component {
         this.setState({ [e.target.name]: e.target.value })};
 
     componentDidMount(){
-        this.props.getOrders();
+        this.props.getOrders(getCookie('csrftoken'));
     }
 
     render() {
@@ -65,7 +80,7 @@ export class Orders extends Component {
                                 <td>{order.client_fio}</td>
                                 <td width='100%'>{order.address}</td>
                                 <td><button
-                                onClick={this.props.delOrder.bind(this, order.id)}
+                                onClick={this.props.delOrder.bind(this, order.id, getCookie('csrftoken'))}
                                 className="btn btn-danger btn-sm">
                                     Удалить</button></td>
                             </tr>

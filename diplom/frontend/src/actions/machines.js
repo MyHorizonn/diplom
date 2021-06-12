@@ -2,8 +2,12 @@ import axios from 'axios';
 
 import { GET_MACHINES, DELETE_MACHINES, CREATE_MACHINES } from './types';
 
-export const getMachines = () => dispatch => { 
-    axios.get('/api/machines/')
+export const getMachines = (csrfToken) => dispatch => { 
+    return axios({
+        method: 'get',
+        url: '/api/machines/',
+        headers: {"X-CSRFToken": csrfToken},
+    })
     .then(res => {
         dispatch({
             type: GET_MACHINES,
@@ -12,20 +16,10 @@ export const getMachines = () => dispatch => {
     }).catch(err => console.log(err));
 };
 
-export const getFreeMachines = () => dispatch => { 
-    axios.get('/api/freemachines/')
-    .then(res => {
-        dispatch({
-            type: GET_MACHINES,
-            payload: res.data
-        });
-    }).catch(err => console.log(err));
-};
-
-//
-
-export const delMachines = id => dispatch => { 
-    axios.delete(`/api/machines/${id}/`)
+export const delMachines = (id, csrfToken) => dispatch => {
+    axios.delete(`/api/machines/${id}`, {
+        headers: {"X-CSRFToken": csrfToken}
+    })
     .then(res => {
         dispatch({
             type: DELETE_MACHINES,
@@ -34,8 +28,10 @@ export const delMachines = id => dispatch => {
     }).catch(err => console.log(err));
 };
 
-export const createMachines = (machines) => dispatch =>{
-    axios.post('/api/machines/', machines)
+export const createMachines = (machines, csrfToken) => dispatch =>{
+    axios.post('/api/machines/', machines, {
+        headers: {"X-CSRFToken": csrfToken}
+    })
     .then(res =>{
         dispatch({
             type: CREATE_MACHINES,

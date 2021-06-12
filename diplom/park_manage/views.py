@@ -1,27 +1,58 @@
+from django.http.response import HttpResponse, HttpResponseBadRequest
+from django.urls import exceptions
 from rest_framework import viewsets
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 from .serializers import *
-
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from django.core.exceptions import ObjectDoesNotExist
 
 class MachineView(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     serializer_class = MachineSerializer
     queryset = Machine.objects.all()
 
 
 class MachineListView(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     serializer_class = MachineListSerializer
     queryset = MachineList.objects.all()
 
 
 class OrderView(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     serializer_class = OrderSerializer
     queryset = Order.objects.all()
 
 
-class FreeMachineView(viewsets.ModelViewSet):
-    serializer_class = MachineSerializer
-    queryset = Machine.objects.filter(status='FREE')
+class UserListView(viewsets.ModelViewSet):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+
+@api_view(['GET', 'POST'])
+def my_login(request):
+    username = request.data['username']
+    password = request.data['password']
+    user = authenticate(request, username=username, password=password)
+    # проверка на пустоту
+    try:
+        user_id = User.objects.get(username=username)
+    except ObjectDoesNotExist:
+        return HttpResponseBadRequest()
+    try:
+        group = user_id.groups.all()[0].id
+    except IndexError:
+        group = 0
+    if user is not None:
+        if user.is_active:
+            login(request, user)
+            return JsonResponse({'group': group})
+    else:
+        return HttpResponseBadRequest()
 
 
-class SearchOrderByFIO(viewsets.ModelViewSet):
-    pass
+def my_logout(request):
+    logout(request)
+    return HttpResponse(status=200)

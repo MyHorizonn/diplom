@@ -4,5 +4,5 @@ import orders from './orders'
 
 export default combineReducers({
     machines,
-    orders
+    orders,
 });

@@ -11,7 +11,7 @@ function date_print(order, ord){
         date1.setDate(date1.getDate() + parseInt(order.duration))
         var date2 = date1.getFullYear() + '-' + (date1.getMonth() + 1) + '-' + date1.getDate()
         return(
-            <tr>
+            <tr key={ord}>
                 <td>{ord.date_of_order}</td>
                 <td>{ord.order_time}</td>
                 <td>{date2}</td>
@@ -25,7 +25,7 @@ function date_print(order, ord){
         var date2 = date1.getHours() + ':' + date1.getMinutes() + ':' + date1.getSeconds()
         var date3 = date1.getFullYear() + '-' + (date1.getMonth() + 1) + '-' + date1.getDate()
         return(
-            <tr>
+            <tr key={ord}>
                 <td>{ord.date_of_order}</td>
                 <td>{ord.order_time}</td>
                 <td>{date3}</td>
@@ -35,6 +35,22 @@ function date_print(order, ord){
     }
     
 }
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 
 export class Machines extends Component {
 
@@ -53,7 +69,7 @@ export class Machines extends Component {
         this.setState({ [e.target.name]: e.target.value })};
 
     componentDidMount(){
-        this.props.getMachines();
+        this.props.getMachines(getCookie('csrftoken'));
         this.props.getOrders();
     }
 
@@ -115,11 +131,11 @@ export class Machines extends Component {
                                                         {date_print(order, ord)}
                                                     </tbody>
                                                     </table>
-                                                </div>                
+                                                </div>      
                                         ))
                                 ))}</td>
                                 <td><button
-                                onClick={this.props.delMachines.bind(this, machine.id)}
+                                onClick={this.props.delMachines.bind(this, machine.id, getCookie('csrftoken'))}
                                 className="btn btn-danger btn-sm">
                                     Удалить</button></td>
                             </tr>

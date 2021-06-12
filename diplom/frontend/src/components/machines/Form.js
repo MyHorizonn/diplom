@@ -3,6 +3,22 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types'
 import {createMachines} from '../../actions/machines'
 
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 export class Form extends Component {
     state = {
         name: '',
@@ -23,9 +39,10 @@ export class Form extends Component {
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
     onSubmit = (e) => {
         e.preventDefault();
+        
         const {name, about, cost_to_hour, cost_to_day, status} = this.state;
         const machines = {name, about, cost_to_hour, cost_to_day, status};
-        this.props.createMachines(machines);
+        this.props.createMachines(machines, getCookie('csrftoken'));
         this.Clear();
         console.log("submit");
     }

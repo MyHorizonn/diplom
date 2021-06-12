@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types'
 import {createOrder} from '../../actions/orders'
-import {getFreeMachines} from '../../actions/machines'
+import {getMachines} from '../../actions/machines'
 
 const blocks = 0;
 
@@ -13,13 +13,26 @@ function twoDigits(num) {
     return num.toString()
 }
 
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 function endDate(date, time, hd, d) {
     if(hd.value == 'DAY'){
         var date1 = new Date(date)
         date1.setDate(date1.getDate() + parseInt(d.value))
         var date2 = date1.getFullYear() + '-' + twoDigits(date1.getMonth() + 1) + '-' + twoDigits(date1.getDate())
-        console.log("date:", date, "time:", time)
-        console.log("date:", date2, "time:", time)
         return [date2, time]
     }
     else{
@@ -27,8 +40,6 @@ function endDate(date, time, hd, d) {
         date1.setHours(date1.getHours() + parseInt(d.value))
         var date2 = twoDigits(date1.getHours()) + ':' + twoDigits(date1.getMinutes()) + ':' + twoDigits(date1.getSeconds())
         var date3 = date1.getFullYear() + '-' + twoDigits(date1.getMonth() + 1) + '-' + twoDigits(date1.getDate())
-        console.log("date:", date, "time:", time)
-        console.log("date:", date3, "time:", date2)
         return [date3, date2]
     }
 }
@@ -46,11 +57,10 @@ export class Form extends Component {
     static propTypes = {
         createOrder: PropTypes.func.isRequired,
         machines: PropTypes.array.isRequired,
-        getFreeMachines: PropTypes.func.isRequired
     };
 
     componentDidMount(){
-        this.props.getFreeMachines();
+        this.props.getMachines(getCookie('csrftoken'))
     }
 
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -73,7 +83,8 @@ export class Form extends Component {
                 coordinate.lat = data[0].lat
                 coordinate.lon = data[0].lon
                 const orders = {date_of_order, order_time, end_date, cost: 0, client_num, client_fio, address, coordinate, machines};
-                this.props.createOrder(orders);
+                console.log(getCookie('csrftoken'))
+                this.props.createOrder(orders, getCookie('csrftoken'));
             }
             else{
                 alert("Адрес не найден.")
@@ -201,4 +212,4 @@ const mapStateToProps = state => ({
     machines: state.machines.machines
 })
 
-export default connect(mapStateToProps, {createOrder, getFreeMachines})(Form);
+export default connect(mapStateToProps, {createOrder, getMachines})(Form);
