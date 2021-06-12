@@ -16,16 +16,19 @@ export const getMachines = (csrfToken) => dispatch => {
     }).catch(err => console.log(err));
 };
 
-export const delMachines = (id, csrfToken) => dispatch => {
-    axios.delete(`/api/machines/${id}`, {
-        headers: {"X-CSRFToken": csrfToken}
-    })
-    .then(res => {
-        dispatch({
-            type: DELETE_MACHINES,
-            payload: id
-        });
-    }).catch(err => console.log(err));
+export const delMachines = (id, csrfToken, group) => dispatch => {
+    console.log(group)
+    if(group == '1'){
+        axios.delete(`/api/machines/${id}`, {
+            headers: {"X-CSRFToken": csrfToken}
+        })
+        .then(res => {
+            dispatch({
+                type: DELETE_MACHINES,
+                payload: id
+            });
+        }).catch(err => console.log(err));
+    }
 };
 
 export const createMachines = (machines, csrfToken) => dispatch =>{

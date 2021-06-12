@@ -13,6 +13,7 @@ class Order(models.Model):
     client_fio = models.CharField(null=False, blank=False, max_length=150)
     address = models.CharField(null=False, blank=False, max_length=150)
     coordinate = models.JSONField(null=False, blank=False)
+    note = models.TextField(null=True, blank=True, max_length=300)
 
     def __str__(self):
         return "%s" % self.address

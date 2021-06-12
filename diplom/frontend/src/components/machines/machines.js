@@ -135,7 +135,7 @@ export class Machines extends Component {
                                         ))
                                 ))}</td>
                                 <td><button
-                                onClick={this.props.delMachines.bind(this, machine.id, getCookie('csrftoken'))}
+                                onClick={this.props.delMachines.bind(this, machine.id, getCookie('csrftoken'), getCookie('group'))}
                                 className="btn btn-danger btn-sm">
                                     Удалить</button></td>
                             </tr>

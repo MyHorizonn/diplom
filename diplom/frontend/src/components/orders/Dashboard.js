@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom';
 import Form from './Form';
 import Orders from './orders'
 
+// 1 - Техник
+// 2 - Заказы
+// 3 - Распределение
+
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -32,9 +36,32 @@ function logout(){
     })
 }
 
-export default function Dashboard_orders() {
-    return (
-        <Fragment>
+function MyRender(){
+    if(getCookie('group') == '1'){
+        window.location.href = 'http://localhost:8000/#/machines'
+    }
+    if(getCookie('group') == '2'){
+        return(
+            <Fragment>
+            <div>
+            <table style={{ borderSpacing: '11px 7px', borderCollapse: 'separate', marginLeft: '35%'}}>
+                <thead>
+                    <tr>
+                        <th>
+                            <button style={{marginLeft: '100%'}} type="button" className='btn btn-primary' onClick={logout}>Выйти</button>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+            </div>
+            <Form/>
+            <Orders/>
+            </Fragment>
+        )
+    }
+    if(getCookie('group') == '3'){
+        return(
+            <Fragment>
             <div>
             <table style={{ borderSpacing: '11px 7px', borderCollapse: 'separate', marginLeft: '35%'}}>
                 <thead>
@@ -56,8 +83,16 @@ export default function Dashboard_orders() {
                 </thead>
             </table>
             </div>
-            <Form/>
             <Orders/>
+            </Fragment>
+        )
+    }
+}
+
+export default function Dashboard_orders() {
+    return (
+        <Fragment>
+            {MyRender()}
         </Fragment>
     )
 }

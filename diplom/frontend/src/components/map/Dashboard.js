@@ -2,6 +2,10 @@ import React, {Fragment} from 'react';
 import {Link} from 'react-router-dom';
 import MyMap from './map';
 
+// 1 - Техник
+// 2 - Заказы
+// 3 - Распределение
+
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -31,9 +35,18 @@ function logout(){
     })
 }
 
-export default function Dashboard_map(){
-    return(
-        <Fragment>
+function MyRender(){
+    if(getCookie('group') == '1'){
+        window.location.href = 'http://localhost:8000/#/machines'
+    }
+    if(getCookie('group') == '2'){
+        return(
+            window.location.href = 'http://localhost:8000/#/orders'
+        )
+    }
+    if(getCookie('group') == '3'){
+        return(
+            <Fragment>
             <div>
             <table style={{ borderSpacing: '11px 7px', borderCollapse: 'separate', marginLeft: '35%'}}>
                 <thead>
@@ -56,6 +69,15 @@ export default function Dashboard_map(){
             </table>
             </div>
             <MyMap/>
+        </Fragment>
+        )
+    }
+}
+
+export default function Dashboard_map(){
+    return(
+        <Fragment>
+            {MyRender()}
         </Fragment>
     )
 }

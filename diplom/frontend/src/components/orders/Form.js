@@ -52,6 +52,7 @@ export class Form extends Component {
         client_num: '',
         client_fio: '',
         address: '',
+        note: '',
     }
 
     static propTypes = {
@@ -74,7 +75,7 @@ export class Form extends Component {
         var hd = document.querySelector('input[name=hd-0]:checked');
         var d = document.getElementById("duration-0");
         var machines = {hour_or_day: hd.value, duration: d.value, machine: m.value}
-        const {date_of_order, order_time, client_num, client_fio, address} = this.state;
+        const {date_of_order, order_time, client_num, client_fio, address, note} = this.state;
         var end_date = endDate(date_of_order, order_time, hd, d)
         fetch('https://nominatim.openstreetmap.org/search?q=' + address.split(' ').join('+') + '&format=json&limit=1')
         .then((response) => response.json())
@@ -93,7 +94,7 @@ export class Form extends Component {
     }
  
     render() {
-        const {date_of_order, order_time, client_num, client_fio, address} = this.state;
+        const {date_of_order, order_time, client_num, client_fio, address, note} = this.state;
         return (
             <div className="card card-body mt-4 mb-4">
                 <h2>Добавить заказ</h2>
@@ -146,6 +147,16 @@ export class Form extends Component {
                         name="address"
                         onChange={this.onChange}
                         value={address}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>Примечание</label>
+                        <input
+                        className="form-control"
+                        type="text"
+                        name="note"
+                        onChange={this.onChange}
+                        value={note}
                         />
                     </div>
                     <div className="form-group">

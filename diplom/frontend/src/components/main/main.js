@@ -51,7 +51,6 @@ export class Login extends Component{
         .then((response) => response.json())
         .then((data) =>{
             document.cookie = `group=${data['group']}`
-            console.log(data['group'])
             if(data['group'] == 1){
                 window.location.href = 'http://localhost:8000/#/machines'
             }

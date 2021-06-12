@@ -14,16 +14,19 @@ export const getOrders = (csrfToken) => dispatch => {
     }).catch(err => console.log(err));
 };
 
-export const delOrder = (id, csrfToken) => dispatch =>{
-    axios.delete(`/api/orders/${id}/`, {
-        headers: {"X-CSRFToken": csrfToken},
-    })
-    .then(res => {
-        dispatch({
-            type: DELETE_ORDER,
-            payload: id
-        });
-    }).catch(err => console.log(err));
+export const delOrder = (id, csrfToken, group) => dispatch =>{
+    console.log(group)
+    if(group == '2'){
+        axios.delete(`/api/orders/${id}/`, {
+            headers: {"X-CSRFToken": csrfToken},
+        })
+        .then(res => {
+            dispatch({
+                type: DELETE_ORDER,
+                payload: id
+            });
+        }).catch(err => console.log(err));
+    }
 };
 
 export const createOrder = (orders, csrfToken) => dispatch =>{
@@ -32,7 +35,7 @@ export const createOrder = (orders, csrfToken) => dispatch =>{
     let machine = {};
     order = {date_of_order: orders.date_of_order, order_time: orders.order_time, 
         end_date_of_order: orders.end_date[0].toString(), end_order_time: orders.end_date[1].toString(), client_num: orders.client_num, 
-        client_fio: orders.client_fio, address: orders.address, coordinate: orders.coordinate};
+        client_fio: orders.client_fio, address: orders.address, coordinate: orders.coordinate, note: orders.note};
     temp = orders.machines
     axios.post('/api/orders/', order, {
         headers: {"X-CSRFToken": csrfToken},
