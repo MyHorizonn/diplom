@@ -97,8 +97,7 @@ export class Form extends Component {
                     <label>Состояние</label>
                     <select className="form-control" name="status" value={status} onChange={this.onChange}>
                         <option value="" selected disabled hidden>-------------------</option>
-                        <option value="FREE">Свободна</option>
-                        <option value="NOT_FREE">Занята</option>
+                        <option value="FREE">Готова к работе</option>
                         <option value="REPAIR">Ремонт</option>
                     </select>
                     </div>

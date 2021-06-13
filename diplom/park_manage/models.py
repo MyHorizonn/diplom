@@ -28,7 +28,6 @@ class Machine(models.Model):
         null=False, max_digits=10, decimal_places=2, blank=False)
     STATUS = (
         ('FREE', 'free'),
-        ('NOT_FREE', 'busy'),
         ('REPAIR', 'on repair'),
     )
     status = models.CharField(max_length=150, choices=STATUS)

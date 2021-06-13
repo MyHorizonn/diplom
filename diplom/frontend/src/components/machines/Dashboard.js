@@ -59,7 +59,25 @@ function MyRender(){
     }
     if(getCookie('group') == '2'){
         return(
-            window.location.href = 'http://localhost:8000/#/orders'
+            <Fragment>
+            <div>
+            <table style={{ borderSpacing: '11px 7px', borderCollapse: 'separate', marginLeft: '35%'}}>
+                <thead>
+                    <tr style={{textDecoration: 'underline'}}>
+                        <th>
+                            <Link to ="/orders">
+                                Список заказов
+                            </Link> 
+                        </th>
+                        <th>
+                            <button style={{marginLeft: '100%'}} type="button" className='btn btn-primary' onClick={logout}>Выйти</button>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+            </div>
+            <Machines />
+        </Fragment>
         )
     }
     if(getCookie('group') == '3'){

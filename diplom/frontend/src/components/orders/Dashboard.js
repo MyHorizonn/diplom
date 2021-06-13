@@ -46,7 +46,12 @@ function MyRender(){
             <div>
             <table style={{ borderSpacing: '11px 7px', borderCollapse: 'separate', marginLeft: '35%'}}>
                 <thead>
-                    <tr>
+                    <tr style={{textDecoration: 'underline'}}>
+                        <th>
+                            <Link to ="/machines">
+                                Список техники
+                            </Link> 
+                        </th>
                         <th>
                             <button style={{marginLeft: '100%'}} type="button" className='btn btn-primary' onClick={logout}>Выйти</button>
                         </th>

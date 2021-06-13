@@ -3,8 +3,6 @@ import {connect} from 'react-redux';
 import { PropTypes } from 'prop-types';
 import { Fragment } from 'react';
 
-var pbkdf2 = require('pbkdf2')
-
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -35,7 +33,6 @@ export class Login extends Component{
     onSubmit = (e) => {
         e.preventDefault();
         const {username, pass} = this.state;
-        console.log(getCookie('csrftoken'))
         fetch('http://localhost:8000/api/users/', {
             method: 'post',
             headers: {
