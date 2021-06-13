@@ -97,7 +97,10 @@ export class Machines extends Component {
                             <th>Стоимость в час</th>
                             <th>Стоимость в день</th>
                             <th>Состояние</th>
+                            {getCookie('group') != 1 ? 
                             <th>Заказы</th>
+                            :
+                            <></>}
                             <th/>
                         </tr>
                     </thead>
@@ -114,26 +117,29 @@ export class Machines extends Component {
                                 <td>{machine.cost_to_hour}</td>
                                 <td>{machine.cost_to_day}</td>
                                 <td>{machine.status}</td>
+                                {getCookie('group') != 1 ? 
                                 <td>{machine.orders.map((order) =>(
-                                        this.props.orders.map((ord) =>(
-                                            ord.id == order.order &&
-                                                <div className="card card-body mt-4 mb-4">
-                                                    <table width="525px">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Дата заказа</th>
-                                                            <th>Время заказа</th>
-                                                            <th>Дата окончания</th>
-                                                            <th>Время окончания</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {date_print(order, ord)}
-                                                    </tbody>
-                                                    </table>
-                                                </div>      
-                                        ))
-                                ))}</td>
+                                    this.props.orders.map((ord) =>(
+                                        ord.id == order.order &&
+                                            <div className="card card-body mt-4 mb-4">
+                                                <table width="525px">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Дата заказа</th>
+                                                        <th>Время заказа</th>
+                                                        <th>Дата окончания</th>
+                                                        <th>Время окончания</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {date_print(order, ord)}
+                                                </tbody>
+                                                </table>
+                                            </div>      
+                                    ))
+                            ))}</td> 
+                                : 
+                                <></>}
                                 <td><button
                                 onClick={this.props.delMachines.bind(this, machine.id, getCookie('csrftoken'), getCookie('group'))}
                                 className="btn btn-danger btn-sm">

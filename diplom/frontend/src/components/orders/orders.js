@@ -62,7 +62,6 @@ export class Orders extends Component {
                             <th>Номер телефона</th>
                             <th>ФИО клиента</th>
                             <th>Адрес</th>
-                            <th>Примечание</th>
                             <th/>
                         </tr>
                     </thead>
@@ -80,7 +79,6 @@ export class Orders extends Component {
                                 <td>{order.client_num}</td>
                                 <td>{order.client_fio}</td>
                                 <td width='100%'>{order.address}</td>
-                                <td>{order.note}</td>
                                 <td><button
                                 onClick={this.props.delOrder.bind(this, order.id, getCookie('csrftoken'), getCookie('group'))}
                                 className="btn btn-danger btn-sm">
