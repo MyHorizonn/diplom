@@ -24,7 +24,7 @@ function getCookie(name) {
 }
 
 function logout(){
-    fetch('api/logout', {
+    fetch('api/logout/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

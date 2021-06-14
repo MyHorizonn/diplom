@@ -1,3 +1,4 @@
+from django.contrib import auth
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.urls import exceptions
 from rest_framework import viewsets
@@ -51,8 +52,3 @@ def my_login(request):
             return JsonResponse({'group': group})
     else:
         return HttpResponseBadRequest()
-
-
-def my_logout(request):
-    logout(request)
-    return HttpResponse(status=200)
