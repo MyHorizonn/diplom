@@ -15,4 +15,6 @@ class OrderAdmin(admin.ModelAdmin):
 
 admin.site.register(Machine)
 admin.site.register(MachineList)
+admin.site.register(TimingTable)
 admin.site.register(Order, OrderAdmin)
+admin.site.register(MachineType)

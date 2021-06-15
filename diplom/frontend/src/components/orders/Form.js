@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types'
 import {createOrder} from '../../actions/orders'
-import {getMachines} from '../../actions/machines'
+import {getTypes} from '../../actions/machinetypes'
 
 const blocks = 0;
 
@@ -52,16 +52,16 @@ export class Form extends Component {
         client_num: '',
         client_fio: '',
         address: '',
-        note: '',
     }
 
     static propTypes = {
         createOrder: PropTypes.func.isRequired,
-        machines: PropTypes.array.isRequired,
+        getTypes: PropTypes.func.isRequired,
+        machinetypes: PropTypes.array.isRequired,
     };
 
     componentDidMount(){
-        this.props.getMachines(getCookie('csrftoken'))
+        this.props.getTypes(getCookie('csrftoken'))
     }
 
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -74,18 +74,19 @@ export class Form extends Component {
         var m = document.getElementById("machine-0");
         var hd = document.querySelector('input[name=hd-0]:checked');
         var d = document.getElementById("duration-0");
-        var machines = {hour_or_day: hd.value, duration: d.value, machine: m.value}
-        const {date_of_order, order_time, client_num, client_fio, address, note} = this.state;
+        var machines = {hour_or_day: hd.value, duration: d.value, type: m.value}
+        const {date_of_order, order_time, client_num, client_fio, address} = this.state;
         var end_date = endDate(date_of_order, order_time, hd, d)
+        var type = m.value
         fetch('https://nominatim.openstreetmap.org/search?q=' + address.split(' ').join('+') + '&format=json&limit=1')
         .then((response) => response.json())
         .then((data) =>{
             if(data[0]){
                 coordinate.lat = data[0].lat
                 coordinate.lon = data[0].lon
-                const orders = {date_of_order, order_time, end_date, cost: 0, client_num, client_fio, address, coordinate, machines};
-                console.log(getCookie('csrftoken'))
+                const orders = {date_of_order, order_time, end_date, cost: 0, client_num, client_fio, address, coordinate, type, machines};
                 this.props.createOrder(orders, getCookie('csrftoken'));
+                alert('Заказ успешно добавлен')
             }
             else{
                 alert("Адрес не найден.")
@@ -94,7 +95,7 @@ export class Form extends Component {
     }
  
     render() {
-        const {date_of_order, order_time, client_num, client_fio, address, note} = this.state;
+        const {date_of_order, order_time, client_num, client_fio, address} = this.state;
         return (
             <div className="card card-body mt-4 mb-4">
                 <h2>Добавить заказ</h2>
@@ -150,20 +151,10 @@ export class Form extends Component {
                         />
                     </div>
                     <div className="form-group">
-                        <label>Примечание</label>
-                        <input
-                        className="form-control"
-                        type="text"
-                        name="note"
-                        onChange={this.onChange}
-                        value={note}
-                        />
-                    </div>
-                    <div className="form-group">
                     <table style={{ borderSpacing: '30px 7px', borderCollapse: 'separate'}}>
                         <thead>
                             <tr>
-                                <th>Техника</th>
+                                <th>Тип техники</th>
                                 <th>Режим</th>
                                 <th>Длительность</th>
                             </tr>
@@ -173,8 +164,8 @@ export class Form extends Component {
                                 <td className="field-machine">
                                     <select className='form-control' id="machine-0">
                                         <option value="" selected disabled hidden>----------------</option>
-                                        {this.props.machines.map((machine) =>(
-                                            <option key={machine.id} value={machine.id}>{machine.name}</option>
+                                        {this.props.machinetypes.map((type) =>(
+                                            <option key={type.id} value={type.id}>{type.name}</option>
                                         ))}
                                     </select>
                                 </td>
@@ -220,7 +211,7 @@ export class Form extends Component {
 }
 
 const mapStateToProps = state => ({
-    machines: state.machines.machines
+    machinetypes: state.machinetypes.machinetypes
 })
 
-export default connect(mapStateToProps, {createOrder, getMachines})(Form);
+export default connect(mapStateToProps, {createOrder, getTypes})(Form);

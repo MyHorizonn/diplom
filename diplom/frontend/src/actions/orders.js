@@ -35,7 +35,7 @@ export const createOrder = (orders, csrfToken) => dispatch =>{
     let machine = {};
     order = {date_of_order: orders.date_of_order, order_time: orders.order_time, 
         end_date_of_order: orders.end_date[0].toString(), end_order_time: orders.end_date[1].toString(), client_num: orders.client_num, 
-        client_fio: orders.client_fio, address: orders.address, coordinate: orders.coordinate, note: orders.note};
+        client_fio: orders.client_fio, address: orders.address, coordinate: orders.coordinate, machine_type: orders.type};
     temp = orders.machines
     axios.post('/api/orders/', order, {
         headers: {"X-CSRFToken": csrfToken},
@@ -45,7 +45,7 @@ export const createOrder = (orders, csrfToken) => dispatch =>{
             type: CREATE_ORDER,
             payload: res.data
         });
-        machine = {hour_or_day: temp.hour_or_day, duration: temp.duration, machine: temp.machine, order: res.data.id};
+        machine = {hour_or_day: temp.hour_or_day, duration: temp.duration, machine: temp.type, order: res.data.id};
         axios.post('/api/machinelists/', machine, {
             headers: {"X-CSRFToken": csrfToken},
         })

@@ -2,7 +2,9 @@ import { func } from 'prop-types';
 import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom';
 import Form from './Form';
+import Form2 from './Form2'
 import Machines from './machines'
+import MachineTypes from './machinetypes';
 
 // 1 - Техник
 // 2 - Заказы
@@ -52,6 +54,8 @@ function MyRender(){
                 </thead>
             </table>
             </div>
+            <Form2 />
+            <MachineTypes />
             <Form />
             <Machines />
         </Fragment>

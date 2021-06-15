@@ -17,7 +17,7 @@ import PropTypes from 'prop-types';
 import { Fragment } from 'react';
 import { getVectorContext } from 'ol/render';
 import {Circle as CircleStyle, Fill, Stroke} from 'ol/style';
-
+import { createTiming, getTiming } from '../../actions/timingtables';
 //  start_point for emulator
 //  5351423.83571834 - lon
 //  5836635.661390703 - lat
@@ -39,6 +39,21 @@ var imageStyle = new Style({
 
 var cars = []
 
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+          var cookie = jQuery.trim(cookies[i]);
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+          }
+      }
+  }
+  return cookieValue;
+}
+
 
 export class MyMap extends Component{
 
@@ -51,8 +66,11 @@ export class MyMap extends Component{
   static propTypes = {
     orders: PropTypes.array.isRequired,
     machines: PropTypes.array.isRequired,
+    timingtables: PropTypes.array.isRequired,
     getOrders: PropTypes.func.isRequired,
     getMachines: PropTypes.func.isRequired,
+    createTiming: PropTypes.func.isRequired,
+    getTiming: PropTypes.func.isRequired,
   }
 
   moving = 0
@@ -102,8 +120,7 @@ export class MyMap extends Component{
       var feature = this.olmap.getFeaturesAtPixel(tik)
       if (feature[0]) {
         document.getElementById('popup').innerHTML =
-        '<p>ID техники: ' + feature[0].get('name')[4][0].machine + '</p>' +
-        '<p>Цена заказа: ' + feature[0].get('name')[4][0].cost + '</p>' +
+        '<p>ID техники: ' + feature[0].get('name')[4] + '</p>' +
         '<table width="525px">' +
         '<thead>' +
             '<tr>' +
@@ -144,7 +161,7 @@ export class MyMap extends Component{
     cars = []
     orders.map((order) =>{
       machines.map((machine) =>{
-        if(order.machines[0].machine == machine.id){
+        if(order.timing_machines[0].machine == machine.id){
           var e_p = fromLonLat([parseFloat(order.coordinate.lon), parseFloat(order.coordinate.lat)])
           cars.push({
             id: machine.id,
@@ -159,16 +176,20 @@ export class MyMap extends Component{
     })
   }
 
-  createMap(orders){
+  createMap(orders, timing){
     const { points } = this.state;
     var i = 0;
     orders.map((order) => {
-      points[i] = new Feature({
-        geometry: new Point(fromLonLat([parseFloat(order.coordinate.lon), parseFloat(order.coordinate.lat)])),
-        name: [order.date_of_order, order.order_time, order.end_date_of_order, order.end_order_time, order.machines],
+      timing.map((timing) =>{
+        if(order.id == timing.order){
+          points[i] = new Feature({
+            geometry: new Point(fromLonLat([parseFloat(order.coordinate.lon), parseFloat(order.coordinate.lat)])),
+            name: [order.date_of_order, order.order_time, order.end_date_of_order, order.end_order_time, timing.machine],
+          })
+          points[i].setStyle(style)
+          i += 1;
+        }
       })
-      points[i].setStyle(style)
-      i += 1;
     })
     var layer = new VectorLayer({
       source: new VectorSource({
@@ -245,6 +266,40 @@ export class MyMap extends Component{
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })};
 
+  onSubmit = (e) =>{
+    e.preventDefault()
+    var order = document.getElementById('order-0').value;
+    var machine = document.getElementById('machine-0').value;
+    this.props.createTiming(getCookie('csrftoken'), order, machine)
+    alert('Техника успешно назначена')
+  }
+
+  changeSelect = (e) =>{
+    e.preventDefault()
+    document.getElementById('machine-0').innerText = null
+    var m_s = document.getElementById('machine-0');
+    var default_opt = document.createElement('option')
+    default_opt.value = ""
+    default_opt.selected = true
+    default_opt.disabled = true
+    default_opt.hidden = true
+    default_opt.innerHTML = '--------------------'
+    m_s.appendChild(default_opt)
+    var order_id = document.getElementById("order-0").value;
+    var type = 0
+    this.props.orders.map((order) =>{
+      if(order.id == order_id){type = order.machine_type}
+    })
+    this.props.machines.map((machine) =>{
+      if(machine.type == type){
+        var opt = document.createElement('option')
+        opt.value = machine.id
+        opt.innerHTML = machine.name
+        m_s.appendChild(opt)
+      }
+    })
+  }
+
   delEvent = (e) =>{
     var temp = this.state.events;
     temp.splice(e, 1)
@@ -255,19 +310,20 @@ export class MyMap extends Component{
 
   componentDidMount() {
     this.olmap.setTarget('map')
-    this.props.getOrders()
-    this.props.getMachines()
+    this.props.getOrders(getCookie('csrftoken'))
+    this.props.getMachines(getCookie('csrftoken'))
+    this.props.getTiming(getCookie('csrftoken'))
   }
 
   componentWillUnmount(){
     clearInterval(this.moving)
+    cars = []
   }
-
 
   render() {
     const { filter, events } = this.state;
     if(cars.length == 0){
-      this.olmap.addLayer(this.createMap(this.props.orders))
+      this.olmap.addLayer(this.createMap(this.props.orders, this.props.timingtables))
     }
     return(
       <Fragment>
@@ -298,6 +354,46 @@ export class MyMap extends Component{
             
             ))}
           </ul>
+        </div>
+        <h2>Распределение</h2>
+        <div className="card card-body mt-4 mb-4">
+          <form onSubmit={this.onSubmit}>
+              <div className='form-group'>
+              <table style={{ borderSpacing: '30px 7px', borderCollapse: 'separate'}}>
+                        <thead>
+                            <tr>
+                                <th>Заказ</th>
+                                <th>Техника</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="block-0">
+                                <td className="field-order">
+                                    <select className='form-control' id="order-0" onChange={this.changeSelect}>
+                                        <option value="" selected disabled hidden>----------------</option>
+                                        {this.props.orders.map((order) =>(
+                                            <option key={order.id} value={order.id}>{order.address}</option>
+                                        ))}
+                                    </select>
+                                </td>
+                                <td>
+                                  <select className='form-control' id='machine-0'>
+                                    <option value="" selected disabled hidden>------------------</option>
+                                  </select>
+                                </td>
+                                <td>
+                                  <div className="form-group">
+                                    <button type="submit" className="btn btn-primary">
+                                      Назначить
+                                    </button>
+                                  </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+              </div>
+              
+          </form>
         </div>
         <h2>Список заказов</h2>
                 <div className='form-group'>
@@ -355,6 +451,7 @@ export class MyMap extends Component{
 const mapStateToProps = state => ({
   orders: state.orders.orders,
   machines: state.machines.machines,
+  timingtables: state.timingtables.timingtables,
 });
 
-export default connect(mapStateToProps, {getOrders, getMachines})(MyMap);
+export default connect(mapStateToProps, {getOrders, getMachines, createTiming, getTiming})(MyMap);

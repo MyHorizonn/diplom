@@ -1,5 +1,19 @@
 from django.db import models
 from django.contrib.auth import authenticate
+from django.db.models.deletion import CASCADE
+from django.db.models.expressions import Case
+
+
+class MachineType(models.Model):
+    name = models.CharField(null=False, max_length=100, blank=False)
+    about = models.TextField(null=False, blank=False)
+    cost_to_hour = models.DecimalField(
+        null=False, max_digits=10, decimal_places=2, blank=False)
+    cost_to_day = models.DecimalField(
+        null=False, max_digits=10, decimal_places=2, blank=False)
+    
+    def __str__(self):
+        return "%s" % self.name
 
 
 class Order(models.Model):
@@ -13,7 +27,9 @@ class Order(models.Model):
     client_fio = models.CharField(null=False, blank=False, max_length=150)
     address = models.CharField(null=False, blank=False, max_length=150)
     coordinate = models.JSONField(null=False, blank=False)
-    note = models.TextField(null=True, blank=True, max_length=300)
+    machine_type = models.ForeignKey(
+        MachineType, on_delete=models.CASCADE, null=False, related_name='machine_type'
+    )
 
     def __str__(self):
         return "%s" % self.address
@@ -22,24 +38,30 @@ class Order(models.Model):
 class Machine(models.Model):
     name = models.CharField(null=False, max_length=150, blank=False)
     about = models.TextField(null=False, blank=False)
-    cost_to_hour = models.DecimalField(
-        null=False, max_digits=10, decimal_places=2, blank=False)
-    cost_to_day = models.DecimalField(
-        null=False, max_digits=10, decimal_places=2, blank=False)
     STATUS = (
         ('FREE', 'free'),
         ('REPAIR', 'on repair'),
     )
     status = models.CharField(max_length=150, choices=STATUS)
+    type = models.ForeignKey(
+        MachineType, on_delete=models.CASCADE, null=False, related_name='type'
+    )
     
-
     def __str__(self):
         return "%s" % self.name
 
 
+class TimingTable(models.Model):
+    machine = models.ForeignKey(
+        Machine, on_delete=CASCADE, null=False, related_name='timing_orders' 
+    )
+    order = models.ForeignKey(
+        Order, on_delete=models.CASCADE, null=False, related_name='timing_machines')
+
+
 class MachineList(models.Model):
     machine = models.ForeignKey(
-        Machine, on_delete=models.CASCADE, null=False, related_name='orders')
+        MachineType, on_delete=models.CASCADE, null=False, related_name='orders')
     CHOICES = (
         ('HOUR', 'hour'),
         ('DAY', 'day'),

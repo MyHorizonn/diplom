@@ -28,9 +28,17 @@ class OrderView(viewsets.ModelViewSet):
     queryset = Order.objects.all()
 
 
-class UserListView(viewsets.ModelViewSet):
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
+class MachineTypeView(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = MachineTypeSerializer
+    queryset = MachineType.objects.all()
+
+
+class TimingTableView(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = TimingTableSerializer
+    queryset = TimingTable.objects.all()
+
 
 @api_view(['GET', 'POST'])
 def my_login(request):

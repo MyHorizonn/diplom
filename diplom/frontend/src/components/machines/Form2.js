@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types'
-import {createMachines} from '../../actions/machines'
-import {getTypes} from '../../actions/machinetypes'
+import {createTypes} from '../../actions/machinetypes'
 
 
 function getCookie(name) {
@@ -20,43 +19,38 @@ function getCookie(name) {
     return cookieValue;
 }
 
-export class Form extends Component {
+export class Form2 extends Component {
     state = {
         name: '',
         about: '',
-        status: '',
+        cost_to_hour: '',
+        cost_to_day: '',
     }
 
     static propTypes = {
-        createMachines: PropTypes.func.isRequired,
-        machinetypes: PropTypes.array.isRequired,
+        createTypes: PropTypes.func.isRequired
     };
 
     Clear(){
         
     }
 
-    componentDidMount(){
-        this.props.getTypes(getCookie('csrftoken'))
-    }
-
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
     onSubmit = (e) => {
         e.preventDefault();
-        var type = document.getElementById("machinetypes").value;
-        const {name, about, status} = this.state;
-        const machines = {name, about, status, type};
-        this.props.createMachines(machines, getCookie('csrftoken'));
+        
+        const {name, about, cost_to_hour, cost_to_day} = this.state;
+        const type = {name, about, cost_to_hour, cost_to_day};
+        this.props.createTypes(type, getCookie('csrftoken'));
         this.Clear();
-        alert('Техника успешно добавлена')
-        this.props.getTypes(getCookie('csrftoken'));
+        alert("Тип техники успешно добавлен")
     }
  
     render() {
-        const {name, about, status} = this.state;
+        const {name, about, cost_to_hour, cost_to_day} = this.state;
         return (
             <div className="card card-body mt-4 mb-4">
-                <h2>Добавить технику</h2>
+                <h2>Добавить тип техники</h2>
                 <form onSubmit={this.onSubmit}>
                     <div className="form-group">
                         <label>Название</label>
@@ -79,21 +73,24 @@ export class Form extends Component {
                         />
                     </div>
                     <div className="form-group">
-                    <label>Состояние</label>
-                    <select className="form-control" name="status" value={status} onChange={this.onChange}>
-                        <option value="" selected disabled hidden>-------------------</option>
-                        <option value="FREE">Готова к работе</option>
-                        <option value="REPAIR">Ремонт</option>
-                    </select>
+                        <label>Стоимость в час</label>
+                        <input
+                        className="form-control"
+                        type="text"
+                        name="cost_to_hour"
+                        onChange={this.onChange}
+                        value={cost_to_hour}
+                        />
                     </div>
-                    <div className='form-group'>
-                    <label>Тип техники</label>
-                    <select className='form-control' id="machinetypes">
-                        <option value="" selected disabled hidden>----------------</option>
-                            {this.props.machinetypes.map((type) =>(
-                                <option key={type.id} value={type.id}>{type.name}</option>
-                            ))}
-                        </select>
+                    <div className="form-group">
+                        <label>Стоимость в день</label>
+                        <input
+                        className="form-control"
+                        type="text"
+                        name="cost_to_day"
+                        onChange={this.onChange}
+                        value={cost_to_day}
+                        />
                     </div>
                     <div className="form-group">
                         <button type="submit" className="btn btn-primary">
@@ -106,8 +103,4 @@ export class Form extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    machinetypes: state.machinetypes.machinetypes
-})
-
-export default connect(mapStateToProps, {createMachines, getTypes})(Form);
+export default connect(null, {createTypes})(Form2);

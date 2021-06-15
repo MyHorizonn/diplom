@@ -70,7 +70,9 @@ export class Machines extends Component {
 
     componentDidMount(){
         this.props.getMachines(getCookie('csrftoken'));
-        this.props.getOrders();
+        if(getCookie('group') != 1){
+            this.props.getOrders();
+        }
     }
 
     render() {
@@ -94,8 +96,6 @@ export class Machines extends Component {
                             <th>ID</th>
                             <th>Название</th>
                             <th>Описание</th>
-                            <th>Стоимость в час</th>
-                            <th>Стоимость в день</th>
                             <th>Состояние</th>
                             {getCookie('group') != 1 ? 
                             <th>Заказы</th>
@@ -114,10 +114,11 @@ export class Machines extends Component {
                                 <td>{machine.id}</td>
                                 <td>{machine.name}</td>
                                 <td>{machine.about}</td>
-                                <td>{machine.cost_to_hour}</td>
-                                <td>{machine.cost_to_day}</td>
-                                <td>{machine.status}</td>
-                                {getCookie('group') != 1 ? 
+                                {machine.status == 'FREE' ? 
+                                <td>Готова к работе</td>
+                                :
+                                <td>На ремонте</td>}
+                                {getCookie('group') != 1 && machine.orders != undefined ? 
                                 <td>{machine.orders.map((order) =>(
                                     this.props.orders.map((ord) =>(
                                         ord.id == order.order &&
@@ -139,7 +140,7 @@ export class Machines extends Component {
                                     ))
                             ))}</td> 
                                 : 
-                                <></>}
+                                <td>Заказов нет</td>}
                                 <td><button
                                 onClick={this.props.delMachines.bind(this, machine.id, getCookie('csrftoken'), getCookie('group'))}
                                 className="btn btn-danger btn-sm">
