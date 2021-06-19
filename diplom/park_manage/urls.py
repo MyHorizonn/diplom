@@ -12,7 +12,7 @@ router.register(r'machines', MachineView, 'machines')
 router.register(r'machinelists', MachineListView, 'machinelists')
 router.register(r'machinetypes', MachineTypeView, 'machinetypes')
 router.register(r'timingtables', TimingTableView, 'timingtables')
-
+router.register(r'freemachines', FreeMachinesView, 'freemachines')
 urlpatterns = router.urls
 
 urlpatterns += [

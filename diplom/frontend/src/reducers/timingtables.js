@@ -1,4 +1,4 @@
-import { CREATE_TIMNG, GET_TIMING } from '../actions/types.js'
+import { CREATE_TIMNG, DELETE_TIMING, GET_TIMING } from '../actions/types.js'
 
 const initialState = {
     timingtables: []
@@ -10,6 +10,12 @@ export default function(state = initialState, action) {
             return{
                 ...state,
                 timingtables: [...state.timingtables, action.payload]
+            }
+        case DELETE_TIMING:
+            return{
+                ...state,
+                timingtables: state.timingtables.filter(
+                    timingtables => timingtables.id !== action.payload)
             }
         case GET_TIMING:
             return{

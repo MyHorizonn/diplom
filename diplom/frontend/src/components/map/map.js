@@ -12,7 +12,7 @@ import { fromLonLat } from 'ol/proj';
 import Style from 'ol/style/Style';
 import Icon from 'ol/style/Icon'
 import {getOrders} from '../../actions/orders';
-import {getMachines} from '../../actions/machines';
+import {getFreeMachines} from '../../actions/machines';
 import PropTypes from 'prop-types';
 import { Fragment } from 'react';
 import { getVectorContext } from 'ol/render';
@@ -38,6 +38,7 @@ var imageStyle = new Style({
 });
 
 var cars = []
+var ev_i = 0
 
 function getCookie(name) {
   var cookieValue = null;
@@ -68,7 +69,7 @@ export class MyMap extends Component{
     machines: PropTypes.array.isRequired,
     timingtables: PropTypes.array.isRequired,
     getOrders: PropTypes.func.isRequired,
-    getMachines: PropTypes.func.isRequired,
+    getFreeMachines: PropTypes.func.isRequired,
     createTiming: PropTypes.func.isRequired,
     getTiming: PropTypes.func.isRequired,
   }
@@ -161,17 +162,20 @@ export class MyMap extends Component{
     cars = []
     orders.map((order) =>{
       machines.map((machine) =>{
-        if(order.timing_machines[0].machine == machine.id){
-          var e_p = fromLonLat([parseFloat(order.coordinate.lon), parseFloat(order.coordinate.lat)])
-          cars.push({
-            id: machine.id,
-            name: machine.name,
-            current_point: [5351423.83571834, 5836635.661390703],
-            end_point: [e_p[0], e_p[1]],
-            step: [(e_p[0] - 5351423.83571834) / 10, (e_p[1] - 5836635.661390703) / 10],
-            adress: order.address,
+        if(order.timing_machines.length != 0)
+        {
+          if(order.timing_machines[0].machine == machine.id){
+            var e_p = fromLonLat([parseFloat(order.coordinate.lon), parseFloat(order.coordinate.lat)])
+            cars.push({
+              id: machine.id,
+              name: machine.name,
+              current_point: [5351423.83571834, 5836635.661390703],
+              end_point: [e_p[0], e_p[1]],
+              step: [(e_p[0] - 5351423.83571834) / 10, (e_p[1] - 5836635.661390703) / 10],
+              adress: order.address,
           })
         }
+      }
       })
     })
   }
@@ -179,17 +183,20 @@ export class MyMap extends Component{
   createMap(orders, timing){
     const { points } = this.state;
     var i = 0;
+    var machine = ''
     orders.map((order) => {
       timing.map((timing) =>{
         if(order.id == timing.order){
+          machine = timing.machine
+        }
+      })
           points[i] = new Feature({
             geometry: new Point(fromLonLat([parseFloat(order.coordinate.lon), parseFloat(order.coordinate.lat)])),
-            name: [order.date_of_order, order.order_time, order.end_date_of_order, order.end_order_time, timing.machine],
+            name: [order.date_of_order, order.order_time, order.end_date_of_order, order.end_order_time, machine == '' ? 'Техника не назначена' : machine],
           })
           points[i].setStyle(style)
           i += 1;
-        }
-      })
+          machine = ''
     })
     var layer = new VectorLayer({
       source: new VectorSource({
@@ -202,13 +209,15 @@ export class MyMap extends Component{
   eventCreator(car, eventType){
     var temp = this.state.events
     if(eventType == "started"){
-      temp.push(Object.assign({}, car, {eventType: "Начал движение"}))
+      temp.push(Object.assign({}, car, {eventType: "Начал движение", id_i: ev_i}))
+      ev_i++;
       this.setState({
         events: temp
       })
     }
     if(eventType == "reached"){
-      temp.push(Object.assign({}, car, {eventType: "Прибыл"}))
+      temp.push(Object.assign({}, car, {eventType: "Прибыл", id_i: ev_i}))
+      ev_i++;
       this.setState({
         events: temp
       })
@@ -221,17 +230,13 @@ export class MyMap extends Component{
         if(Math.abs(car.current_point[0] - car.end_point[0]) >= Math.abs(car.step[0]) && Math.abs(car.current_point[1] - car.end_point[1]) >= Math.abs(car.step[1]))
         {
           car.current_point = [car.current_point[0] + car.step[0], car.current_point[1] + car.step[1]]
-          console.log("move", car.id)
-
           if(Math.abs(car.current_point[0] - car.end_point[0]) < Math.abs(car.step[0]) && Math.abs(car.current_point[1] - car.end_point[1]) < Math.abs(car.step[1])){
-            console.log("reached", car.id)
             car.current_point = car.end_point
             this.eventCreator(car, "reached")
           }
         }
         else{
           car.current_point = car.end_point
-          console.log("reached", car.id)
           this.eventCreator(car, "reached")
         }
       }
@@ -239,7 +244,6 @@ export class MyMap extends Component{
   }
 
   start(){
-    console.log('start')
     clearInterval(this.moving)
     this.spawnCars(this.props.orders, this.props.machines)
     cars.map((car) => {
@@ -311,7 +315,7 @@ export class MyMap extends Component{
   componentDidMount() {
     this.olmap.setTarget('map')
     this.props.getOrders(getCookie('csrftoken'))
-    this.props.getMachines(getCookie('csrftoken'))
+    this.props.getFreeMachines(getCookie('csrftoken'))
     this.props.getTiming(getCookie('csrftoken'))
   }
 
@@ -338,8 +342,7 @@ export class MyMap extends Component{
         <div className="card card-body mt-4 mb-4">
           <ul style={{overflowX: 'scroll', display: 'flex'}}>
             { events.map((event) =>(
-              
-              <li style={{display:'inline-block', marginRight: '10px'}} key={event}>
+              <li style={{display:'inline-block', marginRight: '10px'}} key={event.id_i}>
               <div className="card border-success mb-3" style={{ width: '400px', height: '250px'}}>
                 <div className="card-header">Событие</div>
                 <div className="card-body">
@@ -351,7 +354,6 @@ export class MyMap extends Component{
                 <button type="button" className="btn btn-primary" onClick={this.delEvent.bind(this, events.indexOf(event))}>Ок</button>
               </div>
             </li>
-            
             ))}
           </ul>
         </div>
@@ -372,6 +374,7 @@ export class MyMap extends Component{
                                     <select className='form-control' id="order-0" onChange={this.changeSelect}>
                                         <option value="" selected disabled hidden>----------------</option>
                                         {this.props.orders.map((order) =>(
+                                            !order.timing_machines.length &&
                                             <option key={order.id} value={order.id}>{order.address}</option>
                                         ))}
                                     </select>
@@ -454,4 +457,4 @@ const mapStateToProps = state => ({
   timingtables: state.timingtables.timingtables,
 });
 
-export default connect(mapStateToProps, {getOrders, getMachines, createTiming, getTiming})(MyMap);
+export default connect(mapStateToProps, {getOrders, getFreeMachines, createTiming, getTiming})(MyMap);

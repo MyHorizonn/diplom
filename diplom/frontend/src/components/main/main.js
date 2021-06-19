@@ -57,6 +57,9 @@ export class Login extends Component{
             if(data['group'] == 3){
                 window.location.href = 'http://localhost:8000/#/map'
             }
+            if(!data['group']){
+                window.location.href = 'http://localhost:8000/admin'
+            }
         })
     }
 

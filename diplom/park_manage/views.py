@@ -40,6 +40,12 @@ class TimingTableView(viewsets.ModelViewSet):
     queryset = TimingTable.objects.all()
 
 
+class FreeMachinesView(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = MachineSerializer
+    queryset = Machine.objects.filter(status='FREE')
+
+
 @api_view(['GET', 'POST'])
 def my_login(request):
     username = request.data['username']

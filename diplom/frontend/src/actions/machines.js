@@ -16,6 +16,20 @@ export const getMachines = (csrfToken) => dispatch => {
     }).catch(err => console.log(err));
 };
 
+export const getFreeMachines = (csrfToken) => dispatch => { 
+    return axios({
+        method: 'get',
+        url: '/api/freemachines/',
+        headers: {"X-CSRFToken": csrfToken},
+    })
+    .then(res => {
+        dispatch({
+            type: GET_MACHINES,
+            payload: res.data
+        });
+    }).catch(err => console.log(err));
+};
+
 export const delMachines = (id, csrfToken, group) => dispatch => {
     console.log(group)
     if(group == '1'){

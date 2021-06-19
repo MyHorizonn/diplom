@@ -10,3 +10,4 @@ export const GET_TYPE = 'GET_TYPE';
 export const DEL_TYPE = 'DEL_TYPE';
 export const CREATE_TIMNG = 'CREATE_TIMING';
 export const GET_TIMING = 'GET_TIMING';
+export const DELETE_TIMING = 'DELETE_TIMING';

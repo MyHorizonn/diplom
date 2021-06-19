@@ -3,38 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getMachines, delMachines } from '../../actions/machines';
 import {getOrders} from '../../actions/orders';
-
-
-function date_print(order, ord){
-    if(order.hour_or_day == 'DAY'){
-        var date1 = new Date(ord.date_of_order)
-        date1.setDate(date1.getDate() + parseInt(order.duration))
-        var date2 = date1.getFullYear() + '-' + (date1.getMonth() + 1) + '-' + date1.getDate()
-        return(
-            <tr key={ord}>
-                <td>{ord.date_of_order}</td>
-                <td>{ord.order_time}</td>
-                <td>{date2}</td>
-                <td>{ord.order_time}</td>
-            </tr>
-        )
-    }
-    else{
-        var date1 = new Date(ord.date_of_order + 'T' + ord.order_time)
-        date1.setHours(date1.getHours() + parseInt(order.duration))
-        var date2 = date1.getHours() + ':' + date1.getMinutes() + ':' + date1.getSeconds()
-        var date3 = date1.getFullYear() + '-' + (date1.getMonth() + 1) + '-' + date1.getDate()
-        return(
-            <tr key={ord}>
-                <td>{ord.date_of_order}</td>
-                <td>{ord.order_time}</td>
-                <td>{date3}</td>
-                <td>{date2}</td>
-            </tr>
-        )
-    }
-    
-}
+import {getTypes} from '../../actions/machinetypes';
+import {delTiming} from '../../actions/timingtables';
 
 function getCookie(name) {
     var cookieValue = null;
@@ -52,6 +22,8 @@ function getCookie(name) {
 }
 
 
+
+
 export class Machines extends Component {
 
     state = {
@@ -60,16 +32,26 @@ export class Machines extends Component {
 
     static propTypes = {
         machines: PropTypes.array.isRequired,
+        machinetypes: PropTypes.array.isRequired,
+        getTypes: PropTypes.func.isRequired,
         getMachines: PropTypes.func.isRequired,
         delMachines: PropTypes.func.isRequired,
         getOrders: PropTypes.func.isRequired,
+        delTiming: PropTypes.func.isRequired,
     };
 
     onChange = (e) => {
         this.setState({ [e.target.name]: e.target.value })};
+    
+    temp = (e) =>{
+        e.preventDefault()
+        this.props.delTiming(e.target.id, getCookie('csrftoken'), getCookie('group'))
+        // добавить удаление div'а
+    }
 
     componentDidMount(){
-        this.props.getMachines(getCookie('csrftoken'));
+        this.props.getMachines(getCookie('csrftoken'))
+        this.props.getTypes(getCookie('csrftoken'))
         if(getCookie('group') != 1){
             this.props.getOrders();
         }
@@ -90,17 +72,16 @@ export class Machines extends Component {
                         value={filter}
                     />
                 </div>
-                <table className="table">
+                <table className="table" style={{width: '100%'}}>
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>Название</th>
                             <th>Описание</th>
                             <th>Состояние</th>
-                            {getCookie('group') != 1 ? 
-                            <th>Заказы</th>
-                            :
-                            <></>}
+                            <th>Тип техники</th>
+                            {getCookie('group') != 1 &&
+                            <th>Заказы</th>}
                             <th/>
                         </tr>
                     </thead>
@@ -118,8 +99,13 @@ export class Machines extends Component {
                                 <td>Готова к работе</td>
                                 :
                                 <td>На ремонте</td>}
-                                {getCookie('group') != 1 && machine.orders != undefined ? 
-                                <td>{machine.orders.map((order) =>(
+                                <td>{this.props.machinetypes.map((type) =>(
+                                    type.id == machine.type &&
+                                    type.name
+                                ))}</td>
+                                {getCookie('group') != 1 ?
+                                machine.timing_orders.length != 0 ? 
+                                <td>{machine.timing_orders.map((order) =>(
                                     this.props.orders.map((ord) =>(
                                         ord.id == order.order &&
                                             <div className="card card-body mt-4 mb-4">
@@ -130,21 +116,35 @@ export class Machines extends Component {
                                                         <th>Время заказа</th>
                                                         <th>Дата окончания</th>
                                                         <th>Время окончания</th>
+                                                        <th/>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {date_print(order, ord)}
+                                                <tr key={ord.id}>
+                                                    <td>{ord.date_of_order}</td>
+                                                    <td>{ord.order_time}</td>
+                                                    <td>{ord.end_date_of_order}</td>
+                                                    <td>{ord.end_order_time}</td>
+                                                    <td><button
+                                                    id={order.id}
+                                                    onClick={this.temp} 
+                                                    className="btn btn-danger btn-sm">Удалить</button></td>
+                                                </tr>
                                                 </tbody>
                                                 </table>
                                             </div>      
                                     ))
-                            ))}</td> 
+                            ))}</td>
+                                :
+                                <td>Заказов нет</td>
                                 : 
-                                <td>Заказов нет</td>}
+                                <></>}
+                                {getCookie('group') == 1 &&
                                 <td><button
                                 onClick={this.props.delMachines.bind(this, machine.id, getCookie('csrftoken'), getCookie('group'))}
                                 className="btn btn-danger btn-sm">
                                     Удалить</button></td>
+                                }
                             </tr>
                         ))}
                     </tbody>
@@ -156,8 +156,9 @@ export class Machines extends Component {
 
 const mapStateToProps = state => ({
     machines: state.machines.machines,
-    orders: state.orders.orders
+    orders: state.orders.orders,
+    machinetypes: state.machinetypes.machinetypes,
 });
 
-export default connect(mapStateToProps, {getMachines, delMachines, getOrders})
+export default connect(mapStateToProps, {getMachines, delMachines, getOrders, getTypes, delTiming})
 (Machines);
