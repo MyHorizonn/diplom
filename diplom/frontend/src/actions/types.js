@@ -11,3 +11,4 @@ export const DEL_TYPE = 'DEL_TYPE';
 export const CREATE_TIMNG = 'CREATE_TIMING';
 export const GET_TIMING = 'GET_TIMING';
 export const DELETE_TIMING = 'DELETE_TIMING';
+export const CHANGE_STATUS = 'CHANGE_STATUS';

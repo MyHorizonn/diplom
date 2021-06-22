@@ -46,10 +46,15 @@ export class Form extends Component {
         var type = document.getElementById("machinetypes").value;
         const {name, about, status} = this.state;
         const machines = {name, about, status, type};
+        if(!type || !name || !about || !status){
+            alert('Заполните поля!')
+        }
+        else{
         this.props.createMachines(machines, getCookie('csrftoken'));
         this.Clear();
         alert('Техника успешно добавлена')
         this.props.getTypes(getCookie('csrftoken'));
+        }
     }
  
     render() {

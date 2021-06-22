@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getMachines, delMachines } from '../../actions/machines';
+import { getMachines, delMachines, changeStatus } from '../../actions/machines';
 import {getOrders} from '../../actions/orders';
 import {getTypes} from '../../actions/machinetypes';
 import {delTiming} from '../../actions/timingtables';
@@ -22,8 +22,6 @@ function getCookie(name) {
 }
 
 
-
-
 export class Machines extends Component {
 
     state = {
@@ -38,6 +36,7 @@ export class Machines extends Component {
         delMachines: PropTypes.func.isRequired,
         getOrders: PropTypes.func.isRequired,
         delTiming: PropTypes.func.isRequired,
+        changeStatus: PropTypes.func.isRequired,
     };
 
     onChange = (e) => {
@@ -46,7 +45,8 @@ export class Machines extends Component {
     temp = (e) =>{
         e.preventDefault()
         this.props.delTiming(e.target.id, getCookie('csrftoken'), getCookie('group'))
-        // добавить удаление div'а
+        var el = document.getElementById(e.target.id)
+        el.remove()
     }
 
     componentDidMount(){
@@ -72,7 +72,7 @@ export class Machines extends Component {
                         value={filter}
                     />
                 </div>
-                <table className="table" style={{width: '100%'}}>
+                <table className="table" style={{width: '1400px', maxHeight:'500px', overflowY: 'scroll', overflowX:'hidden', display: 'inline-block'}}>
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -83,6 +83,7 @@ export class Machines extends Component {
                             {getCookie('group') != 1 &&
                             <th>Заказы</th>}
                             <th/>
+                            <th/>
                         </tr>
                     </thead>
                     <tbody>
@@ -92,14 +93,14 @@ export class Machines extends Component {
                         }
                         ).map((machine) =>(
                             <tr key={machine.id}>
-                                <td>{machine.id}</td>
-                                <td>{machine.name}</td>
-                                <td>{machine.about}</td>
+                                <td width='5%'>{machine.id}</td>
+                                <td width='15%'>{machine.name}</td>
+                                <td width='20%'>{machine.about}</td>
                                 {machine.status == 'FREE' ? 
-                                <td>Готова к работе</td>
+                                <td width='20%'>Готова к работе</td>
                                 :
-                                <td>На ремонте</td>}
-                                <td>{this.props.machinetypes.map((type) =>(
+                                <td width='20%'>На ремонте</td>}
+                                <td width='10%'>{this.props.machinetypes.map((type) =>(
                                     type.id == machine.type &&
                                     type.name
                                 ))}</td>
@@ -108,7 +109,7 @@ export class Machines extends Component {
                                 <td>{machine.timing_orders.map((order) =>(
                                     this.props.orders.map((ord) =>(
                                         ord.id == order.order &&
-                                            <div className="card card-body mt-4 mb-4">
+                                            <div id={order.id} className="card card-body mt-4 mb-4">
                                                 <table width="525px">
                                                 <thead>
                                                     <tr>
@@ -145,6 +146,12 @@ export class Machines extends Component {
                                 className="btn btn-danger btn-sm">
                                     Удалить</button></td>
                                 }
+                                {getCookie('group') == 1 &&
+                                <td><button
+                                onClick={this.props.changeStatus.bind(this, getCookie('csrftoken'), machine, machine.status)}
+                                className="btn btn-info btn-sm">
+                                    Изменить состоние</button></td>
+                                }
                             </tr>
                         ))}
                     </tbody>
@@ -160,5 +167,5 @@ const mapStateToProps = state => ({
     machinetypes: state.machinetypes.machinetypes,
 });
 
-export default connect(mapStateToProps, {getMachines, delMachines, getOrders, getTypes, delTiming})
+export default connect(mapStateToProps, {getMachines, delMachines, getOrders, getTypes, delTiming, changeStatus})
 (Machines);

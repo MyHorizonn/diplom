@@ -53,7 +53,7 @@ export class MachineTypes extends Component {
                         value={filter}
                     />
                 </div>
-                <table className="table">
+                <table className="table" style={{width: '1200px', maxHeight:'500px', overflowY: 'scroll', overflowX:'hidden', display: 'inline-block'}}>
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -71,12 +71,12 @@ export class MachineTypes extends Component {
                         }
                         ).map((type) =>(
                             <tr key={type.id}>
-                                <td>{type.id}</td>
-                                <td>{type.name}</td>
-                                <td>{type.about}</td>
-                                <td>{type.cost_to_hour}</td>
-                                <td>{type.cost_to_day}</td>
-                                <td><button
+                                <td width='5%'>{type.id}</td>
+                                <td width='10%'>{type.name}</td>
+                                <td width='20%'>{type.about}</td>
+                                <td width='20%'>{type.cost_to_hour}</td>
+                                <td width='20%'>{type.cost_to_day}</td>
+                                <td width='10%'><button
                                 onClick={this.props.delTypes.bind(this, type.id, getCookie('csrftoken'), getCookie('group'))}
                                 className="btn btn-danger btn-sm">
                                     Удалить</button></td>

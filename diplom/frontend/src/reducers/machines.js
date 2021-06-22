@@ -1,4 +1,5 @@
-import { DELETE_MACHINES, GET_MACHINES, CREATE_MACHINES } from '../actions/types.js'
+import { addProjections } from 'ol/proj'
+import { DELETE_MACHINES, GET_MACHINES, CREATE_MACHINES, CHANGE_STATUS } from '../actions/types.js'
 
 const initialState = {
     machines: []
@@ -10,6 +11,10 @@ export default function(state = initialState, action) {
             return{
                 ...state,
                 machines: action.payload
+            }
+        case CHANGE_STATUS:
+            return{
+                ...state
             }
         case DELETE_MACHINES:
             return{

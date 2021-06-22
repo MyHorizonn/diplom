@@ -52,7 +52,7 @@ export class Orders extends Component {
                         value={filter}
                     />
                 </div>
-                <table className="table">
+                <table className="table" style={{width: '1200px', maxHeight:'500px', overflowY: 'scroll', overflowX:'hidden', display: 'inline-block'}}>
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -72,17 +72,19 @@ export class Orders extends Component {
                         }
                         ).map((order) =>(   
                             <tr key={order.id}>
-                                <td>{order.id}</td>
-                                <td width='25%'>{order.date_of_order}</td>
-                                <td>{order.order_time}</td>
-                                <td>{order.cost}</td>
-                                <td>{order.client_num}</td>
-                                <td>{order.client_fio}</td>
-                                <td width='100%'>{order.address}</td>
-                                <td><button
-                                onClick={this.props.delOrder.bind(this, order.id, getCookie('csrftoken'), getCookie('group'))}
-                                className="btn btn-danger btn-sm">
+                                <td width='5%'>{order.id}</td>
+                                <td width='15%'>{order.date_of_order}</td>
+                                <td width='10%'>{order.order_time}</td>
+                                <td width='10%'>{order.cost}</td>
+                                <td width='15%'>{order.client_num}</td>
+                                <td width='15%'>{order.client_fio}</td>
+                                <td width='20%'>{order.address}</td>
+                                {getCookie('group') == '2' &&
+                                    <td><button
+                                    onClick={this.props.delOrder.bind(this, order.id, getCookie('csrftoken'), getCookie('group'))}
+                                    className="btn btn-danger btn-sm">
                                     Удалить</button></td>
+                                }
                             </tr>
                         ))}
                     </tbody>

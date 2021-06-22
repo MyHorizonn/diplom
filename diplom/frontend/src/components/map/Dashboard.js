@@ -52,11 +52,6 @@ function MyRender(){
                 <thead>
                     <tr style={{textDecoration: 'underline'}}>
                         <th>
-                            <Link to ="/orders">
-                                Список заказов
-                            </Link> 
-                        </th>
-                        <th>
                             <Link to ="/machines">
                                 Список техники
                             </Link> 

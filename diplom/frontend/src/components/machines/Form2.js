@@ -38,12 +38,16 @@ export class Form2 extends Component {
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
     onSubmit = (e) => {
         e.preventDefault();
-        
         const {name, about, cost_to_hour, cost_to_day} = this.state;
         const type = {name, about, cost_to_hour, cost_to_day};
-        this.props.createTypes(type, getCookie('csrftoken'));
-        this.Clear();
-        alert("Тип техники успешно добавлен")
+        if(!name || !about || !cost_to_hour || !cost_to_day){
+            alert('Заполните поля!')
+        }
+        else{
+            this.props.createTypes(type, getCookie('csrftoken'));
+            this.Clear();
+            alert("Тип техники успешно добавлен")
+        }
     }
  
     render() {
@@ -76,7 +80,7 @@ export class Form2 extends Component {
                         <label>Стоимость в час</label>
                         <input
                         className="form-control"
-                        type="text"
+                        type="number"
                         name="cost_to_hour"
                         onChange={this.onChange}
                         value={cost_to_hour}
@@ -86,7 +90,7 @@ export class Form2 extends Component {
                         <label>Стоимость в день</label>
                         <input
                         className="form-control"
-                        type="text"
+                        type="number"
                         name="cost_to_day"
                         onChange={this.onChange}
                         value={cost_to_day}

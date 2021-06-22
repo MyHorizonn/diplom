@@ -1,5 +1,3 @@
-from django.db.models import fields
-from django.db.models.query_utils import select_related_descend
 from .models import *
 from rest_framework import serializers
 

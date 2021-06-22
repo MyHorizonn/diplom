@@ -48,7 +48,7 @@ export class Form extends Component {
     state = {
         date_of_order: '',
         order_time: '',
-        cost: '',
+        cost: '100',
         client_num: '',
         client_fio: '',
         address: '',
@@ -75,7 +75,7 @@ export class Form extends Component {
         var hd = document.querySelector('input[name=hd-0]:checked');
         var d = document.getElementById("duration-0");
         var machines = {hour_or_day: hd.value, duration: d.value, type: m.value}
-        const {date_of_order, order_time, client_num, client_fio, address} = this.state;
+        const {date_of_order, order_time, client_num, client_fio, address, cost} = this.state;
         var end_date = endDate(date_of_order, order_time, hd, d)
         var type = m.value
         fetch('https://nominatim.openstreetmap.org/search?q=' + address.split(' ').join('+') + '&format=json&limit=1')
@@ -84,8 +84,13 @@ export class Form extends Component {
             if(data[0]){
                 coordinate.lat = data[0].lat
                 coordinate.lon = data[0].lon
-                const orders = {date_of_order, order_time, end_date, cost: 0, client_num, client_fio, address, coordinate, type, machines};
+                console.log(this.state.cost)
+                const orders = {date_of_order, order_time, end_date, cost: cost, client_num, client_fio, address, coordinate, type, machines};
                 this.props.createOrder(orders, getCookie('csrftoken'));
+                this.setState({
+                    cost: '100'
+                })
+                console.log(this.state.cost)
                 alert('Заказ успешно добавлен')
             }
             else{

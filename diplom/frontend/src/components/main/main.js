@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { PropTypes } from 'prop-types';
 import { Fragment } from 'react';
 
 function getCookie(name) {
@@ -33,6 +32,10 @@ export class Login extends Component{
     onSubmit = (e) => {
         e.preventDefault();
         const {username, pass} = this.state;
+        if(!username || !pass){
+            alert('Заполните поля!')
+        }
+        else{
         fetch('http://localhost:8000/api/users/', {
             method: 'post',
             headers: {
@@ -45,22 +48,35 @@ export class Login extends Component{
             }),
 
         })
-        .then((response) => response.json())
+        .then((response) => {
+            if(response.status == 400)
+            {
+                alert('Пользователь не найден!')
+            }
+            else{
+                return response.json()
+            }
+            
+        })
         .then((data) =>{
-            document.cookie = `group=${data['group']}`
-            if(data['group'] == 1){
-                window.location.href = 'http://localhost:8000/#/machines'
-            }
-            if(data['group'] == 2){
-                window.location.href = 'http://localhost:8000/#/orders'
-            }
-            if(data['group'] == 3){
-                window.location.href = 'http://localhost:8000/#/map'
-            }
-            if(!data['group']){
-                window.location.href = 'http://localhost:8000/admin'
+            if(data){
+                document.cookie = 'kek=kek'
+                document.cookie = `group=${data['group']}`
+                if(data['group'] == 1){
+                    window.location.href = 'http://localhost:8000/#/machines'
+                }
+                if(data['group'] == 2){
+                    window.location.href = 'http://localhost:8000/#/orders'
+                }
+                if(data['group'] == 3){
+                    window.location.href = 'http://localhost:8000/#/map'
+                }
+                if(!data['group']){
+                    window.location.href = 'http://localhost:8000/admin'
+                }
             }
         })
+    }
     }
 
     render(){

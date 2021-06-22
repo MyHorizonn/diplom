@@ -18,6 +18,7 @@ import { Fragment } from 'react';
 import { getVectorContext } from 'ol/render';
 import {Circle as CircleStyle, Fill, Stroke} from 'ol/style';
 import { createTiming, getTiming } from '../../actions/timingtables';
+
 //  start_point for emulator
 //  5351423.83571834 - lon
 //  5836635.661390703 - lat
@@ -409,10 +410,12 @@ export class MyMap extends Component{
                         value={filter}
                     />
                 </div>
-                <table className="table">
+                <table className="table" style={{width: '1400px', maxHeight:'500px', overflowY: 'scroll', overflowX:'hidden', display: 'inline-block'}}>
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Дата заказа</th>
+                            <th>Время заказа</th>
                             <th>Дата заказа</th>
                             <th>Время заказа</th>
                             <th>Стоимость ₽</th>
@@ -430,12 +433,14 @@ export class MyMap extends Component{
                         ).map((order) =>(
                             <tr key={order.id}>
                                 <td>{order.id}</td>
-                                <td width='25%'>{order.date_of_order}</td>
+                                <td width='10%'>{order.date_of_order}</td>
                                 <td>{order.order_time}</td>
+                                <td width='10%'>{order.end_date_of_order}</td>
+                                <td>{order.end_order_time}</td>
                                 <td>{order.cost}</td>
                                 <td>{order.client_num}</td>
                                 <td>{order.client_fio}</td>
-                                <td width='50%'>{order.address}</td>
+                                <td>{order.address}</td>
                                 <td><button
                                 id={order.id}
                                 onClick={this.onSearch}
