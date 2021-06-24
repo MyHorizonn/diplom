@@ -126,10 +126,13 @@ export class Machines extends Component {
                                                     <td>{ord.order_time}</td>
                                                     <td>{ord.end_date_of_order}</td>
                                                     <td>{ord.end_order_time}</td>
+                                                    {getCookie('group') == 3 && 
                                                     <td><button
                                                     id={order.id}
                                                     onClick={this.temp} 
                                                     className="btn btn-danger btn-sm">Удалить</button></td>
+                                                    }
+
                                                 </tr>
                                                 </tbody>
                                                 </table>
