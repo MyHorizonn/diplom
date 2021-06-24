@@ -60,7 +60,6 @@ export class Login extends Component{
         })
         .then((data) =>{
             if(data){
-                document.cookie = 'kek=kek'
                 document.cookie = `group=${data['group']}`
                 if(data['group'] == 1){
                     window.location.href = 'http://localhost:8000/#/machines'
